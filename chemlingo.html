@@ -6,15 +6,19 @@
   <title>ChemLingo - Học Hóa Học 10 Kiểu Duolingo (STEM Bài 5)</title>
   <style>
     :root {
-      --bg: #0b1120;
-      --card: #1e293b;
-      --text: #f8fafc;
-      --text-muted: #94a3b8;
-      --accent: #38bdf8;
-      --duo-green: #58cc02;
-      --duo-green-dark: #3f9600;
-      --duo-gold: #ffc800;
-      --duo-red: #ff4b4b;
+      --bg: #0c061a;
+      --card: #1a1033;
+      --card-border: #3b246b;
+      --text: #faf5ff;
+      --text-muted: #c4b5fd;
+      --accent: #c084fc;
+      --purple-main: #9333ea;
+      --purple-bright: #a855f7;
+      --purple-dark: #6b21a8;
+      --pink-pop: #ec4899;
+      --duo-green: #22c55e;
+      --duo-gold: #facc15;
+      --duo-red: #f43f5e;
     }
 
     * {
@@ -25,35 +29,69 @@
     }
 
     body {
-      background: var(--bg);
+      background: radial-gradient(circle at 15% 15%, #240f4a 0%, #0c061a 55%, #16092e 100%);
       color: var(--text);
       padding: 12px;
       line-height: 1.5;
       min-height: 100vh;
       overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Nền ánh sáng tím hồng trôi lơ lửng sống động */
+    body::before, body::after {
+      content: "";
+      position: fixed;
+      width: 340px;
+      height: 340px;
+      border-radius: 50%;
+      filter: blur(95px);
+      opacity: 0.24;
+      z-index: -1;
+      pointer-events: none;
+      animation: floatOrb 12s ease-in-out infinite alternate;
+    }
+    body::before {
+      background: #a855f7;
+      top: -80px;
+      left: -80px;
+    }
+    body::after {
+      background: #ec4899;
+      bottom: -90px;
+      right: -80px;
+      animation-delay: -6s;
+    }
+    @keyframes floatOrb {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(45px, 35px) scale(1.18); }
     }
 
     header {
       text-align: center;
-      padding: 16px;
-      background: linear-gradient(135deg, #132a13, #0f172a);
-      border-radius: 14px;
-      border: 1.5px solid #2b8a00;
+      padding: 18px 16px;
+      background: linear-gradient(135deg, rgba(88, 28, 135, 0.85), rgba(30, 14, 66, 0.92));
+      border-radius: 18px;
+      border: 1.5px solid #a855f7;
       margin: 0 auto 14px;
       max-width: 820px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.45);
+      box-shadow: 0 6px 28px rgba(168, 85, 247, 0.28);
+      backdrop-filter: blur(8px);
     }
 
     header h1 {
-      font-size: 1.4rem;
-      color: #89e219;
+      font-size: 1.45rem;
+      background: linear-gradient(90deg, #f5d0fe, #c084fc, #f472b6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
       text-transform: uppercase;
-      letter-spacing: 0.6px;
+      letter-spacing: 0.8px;
+      font-weight: 900;
     }
 
     header p {
-      font-size: 0.85rem;
-      color: #cbd5e1;
+      font-size: 0.86rem;
+      color: #e9d5ff;
       margin-top: 4px;
     }
 
@@ -69,10 +107,10 @@
 
     .twin-btn {
       padding: 11px 20px;
-      border-radius: 12px;
-      border: 2px solid #334155;
-      background: #1e293b;
-      color: #cbd5e1;
+      border-radius: 14px;
+      border: 2px solid var(--card-border);
+      background: var(--card);
+      color: #e9d5ff;
       font-size: 0.9rem;
       font-weight: 800;
       text-decoration: none;
@@ -81,14 +119,14 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.35);
     }
 
     .twin-btn.active-app {
-      background: linear-gradient(135deg, #58cc02, #2b8a00);
-      border-color: #89e219;
+      background: linear-gradient(135deg, #9333ea, #ec4899);
+      border-color: #f0abfc;
       color: #fff;
-      box-shadow: 0 0 18px rgba(88, 204, 2, 0.45);
+      box-shadow: 0 0 22px rgba(192, 132, 252, 0.55);
     }
 
     .twin-btn.sibling-link {
@@ -101,7 +139,7 @@
       background: linear-gradient(135deg, #0284c7, #2563eb);
       color: #fff;
       transform: translateY(-2px);
-      box-shadow: 0 0 18px rgba(56, 189, 248, 0.45);
+      box-shadow: 0 0 18px rgba(56, 189, 248, 0.5);
     }
 
     .twin-pill {
@@ -125,12 +163,13 @@
       justify-content: space-between;
       align-items: center;
       gap: 10px;
-      background: #1e293b;
-      border: 2px solid #334155;
-      border-radius: 16px;
+      background: rgba(26, 16, 51, 0.88);
+      border: 2px solid var(--card-border);
+      border-radius: 18px;
       padding: 12px 16px;
       margin-bottom: 18px;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+      backdrop-filter: blur(8px);
     }
 
     .cl-stats {
@@ -146,15 +185,17 @@
       gap: 6px;
       font-weight: 800;
       font-size: 0.96rem;
-      background: #0f172a;
+      background: #110924;
       padding: 6px 12px;
       border-radius: 12px;
-      border: 1.5px solid #334155;
+      border: 1.5px solid var(--card-border);
+      transition: transform 0.2s;
     }
+    .cl-stat-pill:hover { transform: scale(1.06); }
 
-    .cl-stat-streak { color: #ff9600; border-color: rgba(255,150,0,0.4); }
-    .cl-stat-xp { color: #ffc800; border-color: rgba(255,200,0,0.4); }
-    .cl-stat-hearts { color: #ff4b4b; border-color: rgba(255,75,75,0.4); }
+    .cl-stat-streak { color: #fb923c; border-color: rgba(251,146,60,0.45); }
+    .cl-stat-xp { color: #facc15; border-color: rgba(250,204,21,0.45); }
+    .cl-stat-hearts { color: #fb7185; border-color: rgba(251,113,133,0.45); }
 
     .cl-hud-actions {
       display: flex;
@@ -166,40 +207,47 @@
     .cl-mini-btn {
       padding: 6px 10px;
       border-radius: 10px;
-      border: 1.5px solid #475569;
-      background: #0f172a;
-      color: #cbd5e1;
+      border: 1.5px solid #581c87;
+      background: #110924;
+      color: #e9d5ff;
       font-size: 0.76rem;
       font-weight: 700;
       cursor: pointer;
-      transition: 0.15s;
+      transition: 0.18s;
     }
-    .cl-mini-btn:hover { border-color: #58cc02; color: #fff; }
-    .cl-mini-btn.on { border-color: #58cc02; color: #58cc02; background: rgba(88,204,2,0.12); }
-    .cl-mini-btn.qr-btn { border-color: #ec4899; color: #f472b6; }
+    .cl-mini-btn:hover { border-color: #c084fc; color: #fff; transform: translateY(-1px); }
+    .cl-mini-btn.on { border-color: #c084fc; color: #f5d0fe; background: rgba(168,85,247,0.22); }
+    .cl-mini-btn.qr-btn { border-color: #ec4899; color: #f9a8d4; }
     .cl-mini-btn.qr-btn:hover { background: #ec4899; color: #fff; }
 
     /* Bản đồ lộ trình Zic-Zắc */
     .cl-path-banner {
-      background: linear-gradient(135deg, #58cc02, #2b8a00);
-      border-radius: 16px;
-      padding: 16px 20px;
+      background: linear-gradient(135deg, #7e22ce, #a855f7, #ec4899);
+      background-size: 200% 200%;
+      animation: gradShift 7s ease infinite;
+      border-radius: 18px;
+      padding: 18px 20px;
       color: #fff;
-      margin-bottom: 24px;
+      margin-bottom: 26px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 12px;
-      box-shadow: 0 5px 0 #236e00;
+      box-shadow: 0 6px 0 #4c1d95, 0 10px 26px rgba(168, 85, 247, 0.35);
     }
-    .cl-path-banner h2 { font-size: 1.12rem; margin-bottom: 3px; }
-    .cl-path-banner p { font-size: 0.84rem; opacity: 0.95; }
+    @keyframes gradShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .cl-path-banner h2 { font-size: 1.14rem; margin-bottom: 3px; font-weight: 900; }
+    .cl-path-banner p { font-size: 0.84rem; opacity: 0.96; }
 
     .cl-path-list {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 26px;
+      gap: 28px;
       padding: 12px 0 32px;
     }
 
@@ -208,93 +256,108 @@
       align-items: center;
       gap: 16px;
       width: 100%;
-      max-width: 500px;
+      max-width: 510px;
       justify-content: center;
-      transition: transform 0.2s;
+      transition: transform 0.25s;
     }
+    .cl-node-row:hover { transform: scale(1.02); }
     .cl-node-row.offset-left { transform: translateX(-32px); }
+    .cl-node-row.offset-left:hover { transform: translateX(-32px) scale(1.02); }
     .cl-node-row.offset-right { transform: translateX(32px); }
+    .cl-node-row.offset-right:hover { transform: translateX(32px) scale(1.02); }
     @media (max-width: 540px) {
-      .cl-node-row.offset-left { transform: translateX(-14px); }
-      .cl-node-row.offset-right { transform: translateX(14px); }
+      .cl-node-row.offset-left, .cl-node-row.offset-left:hover { transform: translateX(-14px); }
+      .cl-node-row.offset-right, .cl-node-row.offset-right:hover { transform: translateX(14px); }
     }
 
     .cl-node-btn {
-      width: 82px;
-      height: 82px;
+      width: 84px;
+      height: 84px;
       border-radius: 50%;
-      border: none;
+      border: 3px solid rgba(255,255,255,0.22);
       cursor: pointer;
-      font-size: 2rem;
+      font-size: 2.1rem;
       display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
-      transition: transform 0.12s, box-shadow 0.12s;
+      transition: transform 0.14s, box-shadow 0.14s;
       flex-shrink: 0;
     }
 
     .cl-node-btn.unlocked {
-      background: #58cc02;
+      background: linear-gradient(145deg, #a855f7, #7e22ce);
       color: #fff;
-      box-shadow: 0 7px 0 #3f9600, 0 0 20px rgba(88,204,2,0.35);
+      box-shadow: 0 7px 0 #4c1d95, 0 0 24px rgba(168, 85, 247, 0.55);
+      animation: nodePulse 2.2s infinite;
     }
-    .cl-node-btn.unlocked:active { transform: translateY(5px); box-shadow: 0 2px 0 #3f9600; }
+    @keyframes nodePulse {
+      0%, 100% { box-shadow: 0 7px 0 #4c1d95, 0 0 18px rgba(168, 85, 247, 0.45); }
+      50% { box-shadow: 0 7px 0 #4c1d95, 0 0 32px rgba(236, 72, 153, 0.75); }
+    }
+    .cl-node-btn.unlocked:active { transform: translateY(5px); box-shadow: 0 2px 0 #4c1d95; }
 
     .cl-node-btn.completed {
-      background: #ffc800;
+      background: linear-gradient(145deg, #facc15, #f59e0b);
       color: #000;
-      box-shadow: 0 7px 0 #cc9e00, 0 0 18px rgba(255,200,0,0.35);
+      box-shadow: 0 7px 0 #b45309, 0 0 22px rgba(250, 204, 21, 0.45);
     }
-    .cl-node-btn.completed:active { transform: translateY(5px); box-shadow: 0 2px 0 #cc9e00; }
+    .cl-node-btn.completed:active { transform: translateY(5px); box-shadow: 0 2px 0 #b45309; }
 
     .cl-node-btn.locked {
-      background: #334155;
-      color: #64748b;
-      box-shadow: 0 7px 0 #1e293b;
+      background: #241642;
+      color: #6b5b95;
+      box-shadow: 0 7px 0 #140b29;
       cursor: not-allowed;
     }
 
     .cl-node-badge {
       position: absolute;
-      top: -10px;
-      background: #1e293b;
-      color: #58cc02;
-      border: 2px solid #58cc02;
+      top: -12px;
+      background: #1a1033;
+      color: #f0abfc;
+      border: 2px solid #c084fc;
       font-size: 0.65rem;
-      font-weight: 800;
-      padding: 2px 8px;
+      font-weight: 900;
+      padding: 2px 9px;
       border-radius: 10px;
       white-space: nowrap;
-      animation: clBounce 1.6s infinite;
+      animation: clBounce 1.5s infinite;
     }
     @keyframes clBounce {
       0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-4px); }
+      50% { transform: translateY(-5px); }
     }
 
     .cl-node-info {
-      background: #1e293b;
-      border: 1.5px solid #334155;
-      border-radius: 14px;
-      padding: 11px 14px;
+      background: rgba(26, 16, 51, 0.9);
+      border: 1.5px solid var(--card-border);
+      border-radius: 16px;
+      padding: 12px 15px;
       flex: 1;
       text-align: left;
+      transition: border-color 0.2s;
     }
-    .cl-node-info h3 { font-size: 0.96rem; color: #f8fafc; margin-bottom: 2px; }
-    .cl-node-info p { font-size: 0.78rem; color: #94a3b8; }
-    .cl-node-meta { font-size: 0.72rem; font-weight: 700; color: #ffc800; margin-top: 4px; }
+    .cl-node-row:hover .cl-node-info { border-color: #a855f7; }
+    .cl-node-info h3 { font-size: 0.98rem; color: #faf5ff; margin-bottom: 2px; }
+    .cl-node-info p { font-size: 0.78rem; color: #c4b5fd; }
+    .cl-node-meta { font-size: 0.73rem; font-weight: 700; color: #facc15; margin-top: 5px; }
 
     /* Giao diện Làm Bài (Lesson Arena) */
     .cl-arena {
       display: none;
-      background: #131c31;
-      border: 2px solid #334155;
-      border-radius: 20px;
+      background: rgba(22, 12, 46, 0.94);
+      border: 2px solid #6b21a8;
+      border-radius: 22px;
       padding: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      box-shadow: 0 12px 35px rgba(0,0,0,0.55), 0 0 25px rgba(147, 51, 234, 0.2);
+      animation: arenaPop 0.25s ease-out;
     }
     .cl-arena.active { display: block; }
+    @keyframes arenaPop {
+      from { opacity: 0; transform: scale(0.97); }
+      to { opacity: 1; transform: scale(1); }
+    }
 
     .cl-lesson-top {
       display: flex;
@@ -305,8 +368,8 @@
     .cl-quit-btn {
       background: none;
       border: none;
-      color: #94a3b8;
-      font-size: 1.5rem;
+      color: #c4b5fd;
+      font-size: 1.6rem;
       font-weight: 700;
       cursor: pointer;
       line-height: 1;
@@ -315,18 +378,24 @@
 
     .cl-prog-track {
       flex: 1;
-      height: 14px;
-      background: #1e293b;
+      height: 15px;
+      background: #110924;
       border-radius: 99px;
       overflow: hidden;
-      border: 1px solid #334155;
+      border: 1.5px solid #4c1d95;
     }
     .cl-prog-fill {
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, #58cc02, #89e219);
+      background: linear-gradient(90deg, #9333ea, #c084fc, #ec4899);
+      background-size: 200% 100%;
+      animation: shimmerBar 2.5s linear infinite;
       border-radius: 99px;
-      transition: width 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes shimmerBar {
+      0% { background-position: 100% 0; }
+      100% { background-position: -100% 0; }
     }
 
     .cl-mascot-row {
@@ -337,32 +406,38 @@
     }
     .cl-mascot-icon {
       font-size: 2.8rem;
-      background: #1e293b;
-      border: 2px solid #38bdf8;
+      background: linear-gradient(145deg, #2e1065, #1e1b4b);
+      border: 2.5px solid #c084fc;
       border-radius: 50%;
-      width: 64px;
-      height: 64px;
+      width: 66px;
+      height: 66px;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
+      box-shadow: 0 0 18px rgba(192, 132, 252, 0.4);
+      animation: mascotWiggle 3s ease-in-out infinite;
+    }
+    @keyframes mascotWiggle {
+      0%, 100% { transform: rotate(-4deg) translateY(0); }
+      50% { transform: rotate(4deg) translateY(-4px); }
     }
     .cl-speech {
-      background: #1e293b;
-      border: 1.5px solid #475569;
-      border-radius: 14px;
-      padding: 12px 15px;
+      background: #1e113d;
+      border: 1.5px solid #6b21a8;
+      border-radius: 16px;
+      padding: 13px 16px;
       flex: 1;
-      font-size: 0.98rem;
+      font-size: 0.99rem;
       font-weight: 700;
-      color: #f8fafc;
+      color: #faf5ff;
     }
     .cl-q-type-tag {
       display: inline-block;
       font-size: 0.68rem;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: #38bdf8;
+      letter-spacing: 0.6px;
+      color: #f0abfc;
       margin-bottom: 4px;
       font-weight: 800;
     }
@@ -375,37 +450,37 @@
       margin-bottom: 18px;
     }
     .cl-opt-card {
-      background: #1e293b;
-      border: 2px solid #334155;
-      border-bottom: 5px solid #334155;
+      background: #1e113d;
+      border: 2px solid #4c1d95;
+      border-bottom: 5px solid #3b0764;
       border-radius: 14px;
       padding: 14px 16px;
-      color: #f8fafc;
+      color: #faf5ff;
       font-size: 0.94rem;
       font-weight: 700;
       cursor: pointer;
       text-align: left;
-      transition: 0.12s;
+      transition: 0.14s;
       display: flex;
       align-items: center;
       gap: 10px;
     }
-    .cl-opt-card:hover:not(:disabled) { background: #26354d; border-color: #475569; }
-    .cl-opt-card.selected { background: rgba(56,189,248,0.16); border-color: #38bdf8; border-bottom-color: #0284c7; color: #7dd3fc; }
-    .cl-opt-card.correct { background: rgba(88,204,2,0.18); border-color: #58cc02; border-bottom-color: #3f9600; color: #a3e635; }
-    .cl-opt-card.wrong { background: rgba(255,75,75,0.18); border-color: #ff4b4b; border-bottom-color: #b91c1c; color: #fca5a5; }
+    .cl-opt-card:hover:not(:disabled) { background: #2b1657; border-color: #a855f7; transform: translateY(-2px); }
+    .cl-opt-card.selected { background: rgba(168,85,247,0.24); border-color: #d8b4fe; border-bottom-color: #9333ea; color: #f5d0fe; }
+    .cl-opt-card.correct { background: rgba(34,197,94,0.2); border-color: #22c55e; border-bottom-color: #15803d; color: #86efac; }
+    .cl-opt-card.wrong { background: rgba(244,63,94,0.2); border-color: #f43f5e; border-bottom-color: #be123c; color: #fda4af; }
     .cl-opt-key {
       width: 26px; height: 26px; border-radius: 8px;
-      border: 1.5px solid #475569;
+      border: 1.5px solid #7e22ce;
       display: flex; align-items: center; justify-content: center;
-      font-size: 0.78rem; color: #94a3b8; flex-shrink: 0;
+      font-size: 0.78rem; color: #d8b4fe; flex-shrink: 0;
     }
 
     /* Dạng 2: Xếp gạch Cấu hình e */
     .cl-tile-answer {
-      min-height: 62px;
-      background: #0b1120;
-      border: 2px dashed #475569;
+      min-height: 64px;
+      background: #110924;
+      border: 2px dashed #7e22ce;
       border-radius: 14px;
       padding: 10px;
       display: flex;
@@ -423,18 +498,18 @@
     }
     .cl-tile {
       padding: 9px 15px;
-      background: #1e293b;
-      border: 2px solid #475569;
-      border-bottom: 4px solid #334155;
+      background: #24134a;
+      border: 2px solid #7e22ce;
+      border-bottom: 4px solid #4c1d95;
       border-radius: 12px;
       color: #fff;
       font-weight: 800;
       font-size: 0.96rem;
       cursor: pointer;
-      transition: 0.12s;
+      transition: 0.14s;
     }
-    .cl-tile:hover:not(:disabled) { border-color: #38bdf8; transform: translateY(-2px); }
-    .cl-tile.used { opacity: 0.22; pointer-events: none; }
+    .cl-tile:hover:not(:disabled) { border-color: #f0abfc; background: #3b1c7a; transform: translateY(-2px); }
+    .cl-tile.used { opacity: 0.2; pointer-events: none; }
 
     /* Dạng 3: So sánh VS */
     .cl-vs-grid {
@@ -445,9 +520,9 @@
       margin-bottom: 18px;
     }
     .cl-vs-card {
-      background: #1e293b;
-      border: 2px solid #334155;
-      border-bottom: 5px solid #334155;
+      background: #1e113d;
+      border: 2px solid #4c1d95;
+      border-bottom: 5px solid #3b0764;
       border-radius: 16px;
       padding: 18px 12px;
       text-align: center;
@@ -455,13 +530,13 @@
       transition: 0.15s;
       color: #fff;
     }
-    .cl-vs-card:hover:not(:disabled) { border-color: #38bdf8; transform: translateY(-2px); }
-    .cl-vs-card.selected { border-color: #38bdf8; background: rgba(56,189,248,0.16); border-bottom-color: #0284c7; }
-    .cl-vs-card.correct { border-color: #58cc02; background: rgba(88,204,2,0.18); border-bottom-color: #3f9600; }
-    .cl-vs-card.wrong { border-color: #ff4b4b; background: rgba(255,75,75,0.18); border-bottom-color: #b91c1c; }
-    .cl-vs-sym { font-size: 2rem; font-weight: 900; color: #38bdf8; }
-    .cl-vs-sub { font-size: 0.8rem; color: #cbd5e1; margin-top: 4px; }
-    .cl-vs-badge { font-size: 1.1rem; font-weight: 900; color: #ffc800; }
+    .cl-vs-card:hover:not(:disabled) { border-color: #c084fc; transform: translateY(-3px); }
+    .cl-vs-card.selected { border-color: #e879f9; background: rgba(168,85,247,0.25); border-bottom-color: #9333ea; }
+    .cl-vs-card.correct { border-color: #22c55e; background: rgba(34,197,94,0.2); border-bottom-color: #15803d; }
+    .cl-vs-card.wrong { border-color: #f43f5e; background: rgba(244,63,94,0.2); border-bottom-color: #be123c; }
+    .cl-vs-sym { font-size: 2.1rem; font-weight: 900; color: #e879f9; }
+    .cl-vs-sub { font-size: 0.8rem; color: #e9d5ff; margin-top: 4px; }
+    .cl-vs-badge { font-size: 1.2rem; font-weight: 900; color: #facc15; text-shadow: 0 0 12px rgba(250,204,21,0.5); }
 
     /* Dạng 4: Ghép cặp */
     .cl-match-grid {
@@ -473,9 +548,9 @@
     .cl-match-col { display: flex; flex-direction: column; gap: 10px; }
     .cl-match-btn {
       padding: 12px;
-      background: #1e293b;
-      border: 2px solid #334155;
-      border-bottom: 4px solid #334155;
+      background: #1e113d;
+      border: 2px solid #4c1d95;
+      border-bottom: 4px solid #3b0764;
       border-radius: 12px;
       color: #fff;
       font-weight: 700;
@@ -484,56 +559,62 @@
       transition: 0.15s;
       min-height: 52px;
     }
-    .cl-match-btn.selected { border-color: #38bdf8; background: rgba(56,189,248,0.18); color: #7dd3fc; }
-    .cl-match-btn.matched { opacity: 0.28; border-color: #58cc02; pointer-events: none; text-decoration: line-through; }
-    .cl-match-btn.shake { border-color: #ff4b4b; background: rgba(255,75,75,0.22); }
+    .cl-match-btn:hover:not(.matched) { border-color: #c084fc; }
+    .cl-match-btn.selected { border-color: #f0abfc; background: rgba(168,85,247,0.28); color: #f5d0fe; }
+    .cl-match-btn.matched { opacity: 0.25; border-color: #22c55e; pointer-events: none; text-decoration: line-through; }
+    .cl-match-btn.shake { border-color: #f43f5e; background: rgba(244,63,94,0.25); animation: clShake 0.3s; }
+    @keyframes clShake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      75% { transform: translateX(6px); }
+    }
 
     /* Nút kiểm tra & Phản hồi */
     .cl-action-bar {
       display: flex;
       justify-content: flex-end;
       padding-top: 10px;
-      border-top: 1px solid #334155;
+      border-top: 1px solid #3b246b;
     }
     .cl-check-btn {
       padding: 12px 26px;
       border-radius: 14px;
       border: none;
-      background: #58cc02;
+      background: linear-gradient(135deg, #a855f7, #ec4899);
       color: #fff;
       font-weight: 800;
       font-size: 0.94rem;
       letter-spacing: 0.5px;
       cursor: pointer;
-      box-shadow: 0 5px 0 #3f9600;
+      box-shadow: 0 5px 0 #7e22ce, 0 0 16px rgba(168,85,247,0.4);
       transition: 0.12s;
       text-transform: uppercase;
     }
     .cl-check-btn:disabled {
-      background: #334155;
-      color: #64748b;
-      box-shadow: 0 5px 0 #1e293b;
+      background: #2b1d47;
+      color: #6b5b95;
+      box-shadow: 0 5px 0 #170e29;
       cursor: not-allowed;
     }
-    .cl-check-btn:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 2px 0 #3f9600; }
+    .cl-check-btn:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 2px 0 #7e22ce; }
 
     .cl-feedback {
       display: none;
       margin-top: 14px;
       padding: 14px 16px;
-      border-radius: 14px;
+      border-radius: 16px;
       justify-content: space-between;
       align-items: center;
       gap: 12px;
       flex-wrap: wrap;
+      animation: arenaPop 0.2s ease-out;
     }
     .cl-feedback.show { display: flex; }
-    .cl-feedback.ok { background: rgba(88,204,2,0.16); border: 2px solid #58cc02; }
-    .cl-feedback.err { background: rgba(255,75,75,0.16); border: 2px solid #ff4b4b; }
+    .cl-feedback.ok { background: rgba(34,197,94,0.16); border: 2px solid #22c55e; }
+    .cl-feedback.err { background: rgba(244,63,94,0.16); border: 2px solid #f43f5e; }
     .cl-fb-title { font-weight: 800; font-size: 1rem; margin-bottom: 3px; }
-    .cl-fb-desc { font-size: 0.84rem; color: #e2e8f0; }
+    .cl-fb-desc { font-size: 0.84rem; color: #f3e8ff; }
 
-    /* Liên kết sâu sang Mô hình 3D ở Web anh sinh đôi */
     .twin-3d-jump {
       display: inline-block;
       margin-top: 8px;
@@ -552,12 +633,13 @@
     .cl-summary {
       display: none;
       text-align: center;
-      background: linear-gradient(145deg, #1e293b, #0f172a);
-      border: 2px solid #ffc800;
-      border-radius: 20px;
+      background: linear-gradient(145deg, #241047, #110924);
+      border: 2px solid #c084fc;
+      border-radius: 22px;
       padding: 28px 20px;
+      box-shadow: 0 0 30px rgba(168, 85, 247, 0.35);
     }
-    .cl-summary.active { display: block; }
+    .cl-summary.active { display: block; animation: arenaPop 0.3s ease-out; }
     .cl-sum-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -566,19 +648,34 @@
       margin: 18px auto;
     }
     .cl-sum-box {
-      background: #0b1120;
-      border: 1.5px solid #334155;
+      background: #0c061a;
+      border: 1.5px solid #581c87;
       border-radius: 14px;
       padding: 12px 8px;
     }
-    .cl-sum-val { font-size: 1.4rem; font-weight: 900; color: #ffc800; }
-    .cl-sum-lbl { font-size: 0.72rem; color: #94a3b8; margin-top: 2px; }
+    .cl-sum-val { font-size: 1.4rem; font-weight: 900; color: #facc15; }
+    .cl-sum-lbl { font-size: 0.72rem; color: #c4b5fd; margin-top: 2px; }
+
+    /* Hiệu ứng pháo giấy / hạt sáng khi trả lời đúng */
+    .cl-confetti {
+      position: fixed;
+      width: 9px;
+      height: 9px;
+      border-radius: 2px;
+      pointer-events: none;
+      z-index: 9999;
+      animation: confettiFall 0.9s ease-out forwards;
+    }
+    @keyframes confettiFall {
+      0% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 1; }
+      100% { transform: translate(var(--dx), var(--dy)) rotate(360deg) scale(0.3); opacity: 0; }
+    }
 
     footer {
       text-align: center;
       margin-top: 26px;
       font-size: 0.78rem;
-      color: #64748b;
+      color: #a78bfa;
     }
   </style>
 </head>
@@ -715,6 +812,26 @@ function clSaveState() {
 }
 
 let clAudioCtx = null;
+
+function clBurstConfetti(count = 22) {
+  const colors = ["#c084fc", "#f472b6", "#facc15", "#38bdf8", "#4ade80", "#e879f9"];
+  const cx = window.innerWidth / 2;
+  const cy = window.innerHeight * 0.42;
+  for (let i = 0; i < count; i++) {
+    const dot = document.createElement("div");
+    dot.className = "cl-confetti";
+    dot.style.left = cx + "px";
+    dot.style.top = cy + "px";
+    dot.style.background = colors[i % colors.length];
+    const angle = Math.random() * Math.PI * 2;
+    const dist = 70 + Math.random() * 140;
+    dot.style.setProperty("--dx", Math.cos(angle) * dist + "px");
+    dot.style.setProperty("--dy", Math.sin(angle) * dist + "px");
+    document.body.appendChild(dot);
+    setTimeout(() => dot.remove(), 950);
+  }
+}
+
 function clPlayTone(type) {
   if (!clState.soundOn) return;
   try {
@@ -1247,6 +1364,7 @@ function clShowResult(isOk, explain, refEl) {
     clState.xp += 15;
     clState.streak += 1;
     clPlayTone("ok");
+    clBurstConfetti(20);
     mascot.textContent = "🥳";
     fb.className = "cl-feedback show ok";
     title.style.color = "#89e219";
@@ -1287,6 +1405,7 @@ function clNextQuestion() {
     }
     clSaveState();
     clPlayTone("win");
+    clBurstConfetti(42);
     document.getElementById("clArena").classList.remove("active");
     document.getElementById("clSummary").classList.add("active");
     const acc = Math.round((clCorrectCount / clCurrentUnit.questions.length) * 100);
