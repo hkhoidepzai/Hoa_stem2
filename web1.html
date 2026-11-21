@@ -1,0 +1,2477 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bảng Tuần Hoàn 118 Nguyên Tố - Hóa 10 STEM (Mô Hình 3D)</title>
+  <style>
+    :root {
+      --bg: #0b1120;
+      --card: #1e293b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #38bdf8;
+      --metal: #ef4444;
+      --transition: #f97316;
+      --metalloid: #10b981;
+      --nonmetal: #3b82f6;
+      --noble: #eab308;
+      --rare: #a855f7;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      padding: 12px;
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    header {
+      text-align: center;
+      padding: 16px;
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      border-radius: 14px;
+      border: 1px solid #334155;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+
+    header h1 {
+      font-size: 1.35rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    header p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 5px;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .search-input {
+      padding: 8px 14px;
+      border-radius: 20px;
+      border: 1px solid #475569;
+      background: #1e293b;
+      color: #fff;
+      outline: none;
+      width: 230px;
+      font-size: 0.85rem;
+    }
+
+    .search-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 8px rgba(56, 189, 248, 0.3);
+    }
+
+    .filter-btn {
+      padding: 7px 12px;
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.78rem;
+      color: #fff;
+      opacity: 0.88;
+      transition: 0.2s;
+    }
+
+    .filter-btn:hover, .filter-btn.active {
+      opacity: 1;
+      transform: scale(1.05);
+      box-shadow: 0 0 12px rgba(255,255,255,0.25);
+    }
+
+    .b-all { background: #64748b; }
+    .b-metal { background: var(--metal); }
+    .b-trans { background: var(--transition); }
+    .b-metalloid { background: var(--metalloid); }
+    .b-nonmetal { background: var(--nonmetal); }
+    .b-noble { background: var(--noble); color: #000; }
+    .b-rare { background: var(--rare); }
+    .b-qr { background: #ec4899; }
+    .b-cmp { background: #06b6d4; color: #000; font-weight: 700; }
+
+    .table-wrap {
+      overflow-x: auto;
+      padding-bottom: 14px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .ptable-container {
+      display: grid;
+      grid-template-columns: 44px repeat(18, minmax(52px, 1fr));
+      grid-template-rows: 34px repeat(9, auto);
+      gap: 4px;
+      min-width: 1060px;
+      max-width: 1450px;
+      margin: 0 auto;
+    }
+
+    .col-header {
+      text-align: center;
+      font-size: 0.65rem;
+      font-weight: bold;
+      color: var(--accent);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #1e293b;
+      border-radius: 4px;
+      line-height: 1.15;
+      padding: 2px;
+    }
+
+    .row-header {
+      text-align: right;
+      padding-right: 6px;
+      font-size: 0.72rem;
+      font-weight: bold;
+      color: #facc15;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .el {
+      background: var(--card);
+      border-radius: 6px;
+      padding: 5px 3px;
+      text-align: center;
+      cursor: grab;
+      position: relative;
+      border: 1.5px solid transparent;
+      transition: 0.18s;
+      user-select: none;
+      min-height: 56px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .el:active { cursor: grabbing; }
+
+    .el:hover {
+      transform: scale(1.12);
+      z-index: 10;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.6);
+    }
+
+    .el.metal { border-color: var(--metal); background: rgba(239,68,68,0.15); }
+    .el.trans { border-color: var(--transition); background: rgba(249,115,22,0.15); }
+    .el.metalloid { border-color: var(--metalloid); background: rgba(16,185,129,0.15); }
+    .el.nonmetal { border-color: var(--nonmetal); background: rgba(59,130,246,0.15); }
+    .el.noble { border-color: var(--noble); background: rgba(234,179,8,0.15); }
+    .el.rare { border-color: var(--rare); background: rgba(168,85,247,0.15); }
+    .el.dimmed { opacity: 0.12; filter: grayscale(90%); transform: scale(0.95); }
+
+    .badge-3d {
+      position: absolute;
+      top: 2px;
+      right: 3px;
+      font-size: 0.48rem;
+      background: rgba(56, 189, 248, 0.25);
+      color: #7dd3fc;
+      padding: 0px 3px;
+      border-radius: 3px;
+      font-weight: 700;
+    }
+
+    .el-placeholder {
+      background: rgba(168,85,247,0.08);
+      border: 1px dashed var(--rare);
+      border-radius: 6px;
+      font-size: 0.6rem;
+      color: #d8b4fe;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 56px;
+      cursor: pointer;
+    }
+
+    .z { font-size: 0.63rem; position: absolute; top: 2px; left: 4px; color: var(--text-muted); font-weight: 700; }
+    .sym { font-size: 1.1rem; font-weight: 800; color: #fff; margin-top: 6px; line-height: 1.1; }
+    .name { font-size: 0.55rem; color: #cbd5e1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 2px; }
+    .spacer-row { grid-column: 1 / -1; height: 10px; }
+
+    /* NHÁNH KÉO THẢ SO SÁNH BÁN KÍNH NGUYÊN TỬ */
+    .compare-section {
+      max-width: 980px;
+      margin: 22px auto;
+      background: linear-gradient(145deg, #1e293b, #0f172a);
+      border: 1.5px solid #38bdf8;
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.45);
+    }
+
+    .compare-header {
+      text-align: center;
+      margin-bottom: 14px;
+    }
+
+    .compare-header h2 {
+      color: #38bdf8;
+      font-size: 1.22rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .compare-header p {
+      color: #cbd5e1;
+      font-size: 0.84rem;
+      margin-top: 4px;
+    }
+
+    .palette-box {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 16px;
+    }
+
+    .palette-top {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .palette-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #facc15;
+    }
+
+    .palette-search {
+      padding: 6px 12px;
+      border-radius: 16px;
+      border: 1px solid #475569;
+      background: #1e293b;
+      color: #fff;
+      font-size: 0.8rem;
+      outline: none;
+      width: 220px;
+    }
+
+    .palette-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      max-height: 155px;
+      overflow-y: auto;
+      padding: 4px;
+    }
+
+    .drag-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      background: #1e293b;
+      border: 1.5px solid #475569;
+      color: #fff;
+      cursor: grab;
+      user-select: none;
+      touch-action: none;
+      font-size: 0.82rem;
+      font-weight: 700;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .drag-chip:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    }
+
+    .drag-chip:active {
+      cursor: grabbing;
+      transform: scale(1.08);
+    }
+
+    .drag-chip .chip-z {
+      font-size: 0.7rem;
+      color: #94a3b8;
+      font-weight: 600;
+    }
+
+    .drag-chip .chip-rad {
+      font-size: 0.7rem;
+      color: #38bdf8;
+      background: rgba(56,189,248,0.12);
+      padding: 1px 5px;
+      border-radius: 4px;
+    }
+
+    .drop-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .drop-slot {
+      min-height: 92px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 2px dashed #475569;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      position: relative;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .drop-slot.drag-over {
+      border-color: #facc15;
+      background: rgba(250, 204, 21, 0.12);
+      transform: scale(1.03);
+      box-shadow: 0 0 16px rgba(250, 204, 21, 0.35);
+    }
+
+    .drop-slot.filled {
+      border-style: solid;
+      border-color: #38bdf8;
+      background: linear-gradient(135deg, rgba(30,41,59,0.95), rgba(15,23,42,0.95));
+    }
+
+    .slot-empty-text {
+      font-size: 0.8rem;
+      color: #64748b;
+      pointer-events: none;
+    }
+
+    .slot-empty-text strong {
+      display: block;
+      color: #94a3b8;
+      margin-bottom: 2px;
+      font-size: 0.85rem;
+    }
+
+    .slot-remove {
+      position: absolute;
+      top: 5px;
+      right: 7px;
+      background: rgba(239, 68, 68, 0.2);
+      color: #f87171;
+      border: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      font-size: 0.9rem;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slot-remove:hover {
+      background: #ef4444;
+      color: #fff;
+    }
+
+    .slot-el-sym {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.1;
+    }
+
+    .slot-el-name {
+      font-size: 0.8rem;
+      color: #cbd5e1;
+      margin-top: 2px;
+    }
+
+    .slot-el-rad {
+      font-size: 0.76rem;
+      color: #38bdf8;
+      font-weight: 700;
+      margin-top: 3px;
+    }
+
+    .touch-ghost {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      background: #1e293b;
+      border: 2px solid #facc15;
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.7);
+      transform: translate(-50%, -120%);
+      white-space: nowrap;
+    }
+
+    .preset-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 14px;
+    }
+
+    .preset-btn {
+      padding: 6px 12px;
+      border-radius: 14px;
+      border: 1px solid #475569;
+      background: #0f172a;
+      color: #e2e8f0;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .preset-btn:hover {
+      border-color: #38bdf8;
+      color: #38bdf8;
+      transform: translateY(-2px);
+    }
+
+    .visual-stage {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      align-items: flex-end;
+      gap: 16px;
+      background: rgba(11, 17, 32, 0.75);
+      border-radius: 12px;
+      padding: 24px 12px 16px;
+      min-height: 220px;
+      border: 1px dashed #334155;
+      margin-bottom: 14px;
+    }
+
+    .atom-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      min-width: 110px;
+    }
+
+    .atom-sphere-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 150px;
+      margin-bottom: 8px;
+    }
+
+    .atom-sphere {
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      box-shadow: inset -6px -6px 16px rgba(0,0,0,0.6), 0 0 18px rgba(56,189,248,0.35);
+      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      border: 2px solid rgba(255,255,255,0.4);
+    }
+
+    .atom-nucleus {
+      width: 8px;
+      height: 8px;
+      background: #fff;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #fff;
+      position: absolute;
+    }
+
+    .atom-label-sym {
+      font-weight: 800;
+      font-size: 1rem;
+      color: #fff;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.9);
+      z-index: 2;
+    }
+
+    .atom-meta {
+      font-size: 0.8rem;
+      color: #e2e8f0;
+      font-weight: 700;
+    }
+
+    .atom-sub {
+      font-size: 0.72rem;
+      color: #94a3b8;
+    }
+
+    .compare-conclusion {
+      background: #0f172a;
+      border-left: 4px solid #facc15;
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      line-height: 1.55;
+    }
+
+    .compare-conclusion strong {
+      color: #facc15;
+    }
+
+    /* MODAL VÀ MÔ HÌNH NGUYÊN TỬ 3D */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.82);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 12px;
+      z-index: 100;
+    }
+
+    .modal {
+      background: #1e293b;
+      border-radius: 16px;
+      max-width: 540px;
+      width: 100%;
+      padding: 18px;
+      border: 1px solid #475569;
+      position: relative;
+      max-height: 92vh;
+      overflow-y: auto;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.65);
+    }
+
+    .close {
+      position: absolute;
+      top: 10px;
+      right: 14px;
+      font-size: 1.6rem;
+      color: var(--text-muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .m-head {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid #334155;
+      padding-bottom: 10px;
+    }
+
+    .m-box {
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      font-weight: 800;
+      background: #0f172a;
+      border: 2px solid var(--accent);
+    }
+
+    /* Khung Mô hình 3D trong Modal */
+    .atom-3d-wrapper {
+      background: radial-gradient(circle at center, #111c35 0%, #070b14 100%);
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 10px;
+      margin-bottom: 12px;
+      text-align: center;
+      position: relative;
+    }
+
+    .atom-3d-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: center;
+      margin-bottom: 6px;
+    }
+
+    .mode-3d-btn {
+      padding: 4px 10px;
+      border-radius: 12px;
+      border: 1px solid #475569;
+      background: #1e293b;
+      color: #cbd5e1;
+      font-size: 0.73rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+
+    .mode-3d-btn.active {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
+      font-weight: 700;
+    }
+
+    #atomCanvas {
+      width: 100%;
+      max-width: 340px;
+      height: 240px;
+      cursor: grab;
+      touch-action: none;
+      display: block;
+      margin: 0 auto;
+    }
+
+    #atomCanvas:active {
+      cursor: grabbing;
+    }
+
+    .atom-3d-hint {
+      font-size: 0.72rem;
+      color: #94a3b8;
+      margin-top: 4px;
+    }
+
+    .shell-badge-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: center;
+      margin-top: 6px;
+    }
+
+    .shell-badge {
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #e0f2fe;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 0.74rem;
+      font-weight: 600;
+    }
+
+    .m-list {
+      list-style: none;
+      font-size: 0.86rem;
+    }
+
+    .m-list li {
+      margin-bottom: 7px;
+      padding: 8px 11px;
+      background: #0f172a;
+      border-radius: 8px;
+    }
+
+    .m-list strong { color: var(--accent); }
+
+    .modal-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .yt {
+      display: block;
+      text-align: center;
+      background: #dc2626;
+      color: #fff;
+      text-decoration: none;
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    .add-cmp-btn {
+      background: #06b6d4;
+      color: #000;
+      border: none;
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    .quiz {
+      max-width: 640px;
+      margin: 20px auto 10px;
+      background: #1e293b;
+      padding: 16px;
+      border-radius: 14px;
+      border: 1px solid #334155;
+      text-align: center;
+    }
+
+    .quiz h3 { color: #facc15; font-size: 1.05rem; margin-bottom: 8px; }
+    .q-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+    .q-btn {
+      padding: 10px;
+      background: #334155;
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+  
+    /* Thanh chia 2 Mục chính (Main Tabs) */
+    .main-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .main-tab-btn {
+      padding: 12px 22px;
+      border-radius: 12px;
+      border: 2px solid #334155;
+      background: #1e293b;
+      color: #cbd5e1;
+      font-size: 0.92rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .main-tab-btn:hover {
+      border-color: var(--accent);
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+    .main-tab-btn.active {
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      border-color: #38bdf8;
+      color: #fff;
+      box-shadow: 0 0 18px rgba(56, 189, 248, 0.45);
+    }
+
+    .tab-section {
+      display: none;
+      animation: fadeIn 0.25s ease-in-out;
+    }
+
+    .tab-section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Giao diện Mục 2: Hướng dẫn làm Bảng Tuần Hoàn Vật Lý */
+    .diy-container {
+      max-width: 1020px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .diy-card {
+      background: linear-gradient(145deg, #1e293b, #0f172a);
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+    }
+
+    .diy-card h2 {
+      color: #38bdf8;
+      font-size: 1.2rem;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid #334155;
+      padding-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .diy-grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+    }
+
+    .step-card {
+      background: #0b1120;
+      border: 1px solid #334155;
+      border-left: 4px solid #38bdf8;
+      border-radius: 12px;
+      padding: 14px;
+      transition: 0.2s;
+    }
+
+    .step-card:hover {
+      border-color: #facc15;
+      transform: translateY(-2px);
+    }
+
+    .step-badge {
+      display: inline-block;
+      background: #38bdf8;
+      color: #000;
+      font-weight: 800;
+      font-size: 0.75rem;
+      padding: 2px 9px;
+      border-radius: 12px;
+      margin-bottom: 6px;
+    }
+
+    .step-card h3 {
+      font-size: 1rem;
+      color: #f8fafc;
+      margin-bottom: 6px;
+    }
+
+    .step-card ul {
+      padding-left: 18px;
+      font-size: 0.86rem;
+      color: #cbd5e1;
+    }
+
+    .step-card li {
+      margin-bottom: 5px;
+    }
+
+    .blueprint-box {
+      background: #071324;
+      border: 2px dashed #38bdf8;
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .flip-demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .flip-layer {
+      background: #1e293b;
+      border: 1.5px solid #475569;
+      border-radius: 10px;
+      padding: 12px;
+      text-align: left;
+    }
+
+    .flip-layer strong {
+      color: #facc15;
+      display: block;
+      margin-bottom: 4px;
+      font-size: 0.9rem;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #0b1120;
+      padding: 10px 12px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      font-size: 0.88rem;
+      border: 1px solid #1e293b;
+    }
+
+    .check-item input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: #10b981;
+      cursor: pointer;
+    }
+
+    .sample-table-wrap {
+      overflow-x: auto;
+      margin-top: 10px;
+    }
+
+    .sample-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.83rem;
+      min-width: 650px;
+    }
+
+    .sample-table th, .sample-table td {
+      border: 1px solid #334155;
+      padding: 8px 10px;
+      text-align: left;
+    }
+
+    .sample-table th {
+      background: #0f172a;
+      color: #38bdf8;
+      font-weight: 700;
+    }
+
+    .sample-table tr:nth-child(even) {
+      background: rgba(15, 23, 42, 0.55);
+    }
+
+  
+    /* Bàn Thí Nghiệm Ghép Cặp Phản Ứng */
+    .lab-section {
+      max-width: 980px;
+      margin: 22px auto;
+      background: linear-gradient(145deg, #1e293b, #0f172a);
+      border: 1.5px solid #10b981;
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.45);
+    }
+    .lab-header { text-align: center; margin-bottom: 14px; }
+    .lab-header h2 { color: #10b981; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 0.5px; }
+    .lab-header p { color: #cbd5e1; font-size: 0.84rem; margin-top: 4px; }
+    .lab-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 16px; }
+    .lab-chip {
+      padding: 6px 12px; border-radius: 8px; background: #0f172a; border: 1.5px solid #10b981;
+      color: #fff; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: 0.2s;
+    }
+    .lab-chip:hover { background: #10b981; color: #000; transform: translateY(-2px); }
+    .lab-bench {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 14px;
+      background: rgba(11, 17, 32, 0.8); border: 1px dashed #334155; border-radius: 12px; padding: 18px;
+    }
+    .lab-slot {
+      width: 115px; height: 85px; border: 2px dashed #475569; border-radius: 12px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      background: #0f172a; cursor: pointer; transition: 0.2s;
+    }
+    .lab-slot.active-el { border-style: solid; border-color: #10b981; background: rgba(16, 185, 129, 0.12); }
+    .lab-plus { font-size: 1.6rem; font-weight: 800; color: #facc15; }
+    .lab-result {
+      min-width: 240px; flex: 1; background: #0f172a; border: 1.5px solid #38bdf8;
+      border-radius: 12px; padding: 14px; text-align: left;
+    }
+    .lab-eq { font-family: monospace; font-size: 0.95rem; color: #facc15; background: #1e293b; padding: 4px 8px; border-radius: 6px; display: inline-block; margin: 6px 0; }
+
+  
+    /* Nút liên kết Web Anh Em Sinh Đôi (ChemLingo) */
+    .twin-link-btn {
+      text-decoration: none;
+      border-color: #58cc02 !important;
+      background: linear-gradient(135deg, rgba(88,204,2,0.18), rgba(22,101,52,0.35)) !important;
+      color: #bef264 !important;
+    }
+    .twin-link-btn:hover {
+      background: linear-gradient(135deg, #58cc02, #2b8a00) !important;
+      color: #fff !important;
+      box-shadow: 0 0 18px rgba(88, 204, 2, 0.5) !important;
+    }
+    .twin-pill {
+      background: #58cc02;
+      color: #052e16;
+      font-size: 0.7rem;
+      font-weight: 900;
+      padding: 2px 7px;
+      border-radius: 99px;
+      margin-left: 4px;
+    }
+
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Bảng Tuần Hoàn 118 Nguyên Tố Hóa Học</h1>
+  <p>Dự án STEM Hóa Học 10 - Bài 5: Tích hợp Mô Hình Nguyên Tử 3D Tương Tác & Trạm Kéo Thả</p>
+</header>
+
+
+<!-- THANH ĐIỀU HƯỚNG & LIÊN KẾT ANH EM SINH ĐÔI -->
+<div class="main-tabs">
+  <button class="main-tab-btn active" id="tabBtn1" onclick="switchMainTab(1)">
+    🌐 BẢNG TUẦN HOÀN SỐ 3D
+  </button>
+  <button class="main-tab-btn" id="tabBtn2" onclick="switchMainTab(2)">
+    🛠️ HƯỚNG DẪN LÀM BẢNG VẬT LÝ
+  </button>
+  <a href="chemlingo.html" class="main-tab-btn twin-link-btn" id="twinChemLingoBtn">
+    🦉 CHEMLINGO (HỌC NHƯ DUOLINGO) <span class="twin-pill" id="twinXpBadge">APP RIÊNG ↗</span>
+  </a>
+</div>
+
+<!-- MỤC 1: BẢNG TUẦN HOÀN TƯƠNG TÁC SỐ -->
+<div class="tab-section active" id="mainTab1">
+
+<div class="controls">
+  <input type="text" class="search-input" id="search" placeholder="🔍 Tìm ký hiệu, tên, số Z (VD: Na, 11)..." oninput="searchEl(this.value)">
+  <button class="filter-btn b-all active" onclick="filterEl('all', this)">Tất cả (118)</button>
+  <button class="filter-btn b-metal" onclick="filterEl('metal', this)">Kim loại nhóm A</button>
+  <button class="filter-btn b-trans" onclick="filterEl('trans', this)">Kim loại chuyển tiếp</button>
+  <button class="filter-btn b-metalloid" onclick="filterEl('metalloid', this)">Bán kim</button>
+  <button class="filter-btn b-nonmetal" onclick="filterEl('nonmetal', this)">Phi kim</button>
+  <button class="filter-btn b-noble" onclick="filterEl('noble', this)">Khí hiếm</button>
+  <button class="filter-btn b-rare" onclick="filterEl('rare', this)">Lantan & Actini</button>
+  <button class="filter-btn" style="background:#10b981;color:#000;font-weight:700;" onclick="document.getElementById('labSection').scrollIntoView({behavior:'smooth'})">🧪 Thí Nghiệm Ghép Chất</button>
+  <button class="filter-btn b-cmp" onclick="document.getElementById('compareSection').scrollIntoView({behavior:'smooth'})">🧲 Kéo Thả So Sánh</button>
+</div>
+
+<div class="table-wrap">
+  <div class="ptable-container" id="ptable"></div>
+</div>
+
+<!-- NHÁNH KÉO THẢ SO SÁNH BÁN KÍNH NGUYÊN TỬ -->
+<section class="compare-section" id="compareSection">
+  <div class="compare-header">
+    <h2>🧲 Trạm Kéo Thả So Sánh Bán Kính Nguyên Tử</h2>
+    <p>Dùng ngón tay (hoặc chuột) <strong>kéo thẻ nguyên tố</strong> từ khay bên dưới (hoặc từ Bảng tuần hoàn) thả vào 4 ô để so sánh trực quan!</p>
+  </div>
+
+  <div class="preset-bar">
+    <button class="preset-btn" onclick="applyPreset([3, 6, 8, 9])">📉 Mẫu Chu kỳ 2 (Li, C, O, F)</button>
+    <button class="preset-btn" onclick="applyPreset([11, 12, 13, 17])">📉 Mẫu Chu kỳ 3 (Na, Mg, Al, Cl)</button>
+    <button class="preset-btn" onclick="applyPreset([3, 11, 19, 37])">📈 Mẫu Nhóm IA (Li, Na, K, Rb)</button>
+    <button class="preset-btn" onclick="applyPreset([9, 17, 35, 53])">📈 Mẫu Nhóm VIIA (F, Cl, Br, I)</button>
+    <button class="preset-btn" style="border-color:#ef4444;color:#fca5a5;" onclick="applyPreset([0, 0, 0, 0])">🗑️ Xóa trống 4 ô</button>
+  </div>
+
+  <div class="palette-box">
+    <div class="palette-top">
+      <span class="palette-title">👆 Khay Nguyên Tố Kéo Thả (Kéo thả vào ô bên dưới hoặc chạm để thêm):</span>
+      <input type="text" class="palette-search" id="paletteSearch" placeholder="🔎 Lọc nhanh trong 118 nguyên tố..." oninput="renderPalette(this.value)">
+    </div>
+    <div class="palette-list" id="paletteList"></div>
+  </div>
+
+  <div class="drop-grid" id="dropGrid">
+    <div class="drop-slot" data-slot="0"></div>
+    <div class="drop-slot" data-slot="1"></div>
+    <div class="drop-slot" data-slot="2"></div>
+    <div class="drop-slot" data-slot="3"></div>
+  </div>
+
+  <div class="visual-stage" id="visualStage"></div>
+  <div class="compare-conclusion" id="compareConclusion"></div>
+</section>
+
+
+<!-- BÀN THÍ NGHIỆM GHÉP CẶP PHẢN ỨNG -->
+<section class="lab-section" id="labSection">
+  <div class="lab-header">
+    <h2>🧪 Bàn Thí Nghiệm Ghép Cặp Tạo Chất Thực Tế</h2>
+    <p>Chạm chọn <strong>2 nguyên tố</strong> bên dưới để quan sát phản ứng hóa học, sản phẩm tạo thành và ứng dụng trong đời sống!</p>
+  </div>
+  <div class="lab-chips" id="labChips"></div>
+  <div class="lab-bench">
+    <div class="lab-slot" id="labSlot1" onclick="clearLabSlot(1)"><span style="color:#64748b;font-size:0.8rem;">Chất tham gia 1</span></div>
+    <div class="lab-plus">+</div>
+    <div class="lab-slot" id="labSlot2" onclick="clearLabSlot(2)"><span style="color:#64748b;font-size:0.8rem;">Chất tham gia 2</span></div>
+    <div class="lab-plus">➔</div>
+    <div class="lab-result" id="labResult">
+      <div style="color:#94a3b8;font-size:0.85rem;">Hãy chọn 2 nguyên tố (ví dụ: <strong>Na + Cl</strong>, <strong>H + O</strong>, <strong>Mg + O</strong>, <strong>Fe + S</strong>...) để thực hiện phản ứng!</div>
+    </div>
+  </div>
+</section>
+
+<div class="quiz">
+  <h3>⚡ Đố Vui Nhanh Hóa Học 10</h3>
+  <p id="q-text" style="font-size:0.9rem;"></p>
+  <div class="q-opts" id="q-opts"></div>
+  <p id="q-res" style="margin-top:8px; font-weight:bold; font-size:0.85rem; min-height:20px;"></p>
+</div>
+
+
+</div> <!-- Đóng Mục 1 -->
+
+<!-- MỤC 2: HƯỚNG DẪN CHI TIẾT TỪNG BƯỚC LÀM BẢNG TUẦN HOÀN VẬT LÝ -->
+<div class="tab-section" id="mainTab2">
+  <div class="diy-container">
+
+    <!-- Tổng quan mô hình & Chi phí -->
+    <div class="diy-card">
+      <h2>📦 1. Chuẩn Bị Vật Liệu & Chi Phí Tiết Kiệm (Dưới 50.000đ)</h2>
+      <p style="font-size:0.88rem; color:#cbd5e1; margin-bottom:12px;">
+        Mô hình <strong>"Bảng Tuần Hoàn Cửa Sổ Lật 3 Lớp (Flip-Card) kết hợp Mẫu Vật Thật & Web QR"</strong> giúp kết hợp trực quan vật lý với công nghệ số mà không cần mạch điện phức tạp. Bạn có thể tích vào các ô bên dưới để kiểm tra tiến độ chuẩn bị vật tư:
+      </p>
+      <div class="diy-grid-2">
+        <div>
+          <label class="check-item"><input type="checkbox"> <span><strong>Tấm bìa carton cứng khổ A2 (42 × 60 cm):</strong> Tận dụng từ vỏ thùng mì tôm/thùng hàng cũ (<strong>0đ</strong>).</span></label>
+          <label class="check-item"><input type="checkbox"> <span><strong>Giấy bìa màu A4 cứng (3 màu):</strong> Đỏ/Hồng (Kim loại), Xanh dương (Phi kim), Vàng (Khí hiếm) (<strong>~20.000đ</strong>).</span></label>
+          <label class="check-item"><input type="checkbox"> <span><strong>Bản in Mã QR (1-2 tờ A4):</strong> Bấm nút <em>"🖨️ Tạo QR Từng Nguyên Tố"</em> ở Mục 1 để in ra giấy (<strong>~5.000đ</strong>).</span></label>
+        </div>
+        <div>
+          <label class="check-item"><input type="checkbox"> <span><strong>Vật mẫu thực tế quanh nhà:</strong> Ruột bút chì (C), giấy bạc (Al), dây đồng (Cu), muối ăn (Na/Cl)... (<strong>0đ</strong>).</span></label>
+          <label class="check-item"><input type="checkbox"> <span><strong>Băng dính 2 mặt xốp / Nhám dính Velcro:</strong> Để gắn thẻ nguyên tố tháo lắp linh hoạt khi thuyết trình (<strong>~15.000đ</strong>).</span></label>
+          <label class="check-item"><input type="checkbox"> <span><strong>Dụng cụ cơ bản:</strong> Kéo, thước kẻ, bút dạ nhiều màu, băng dính trong (<strong>Tận dụng đồ sẵn có</strong>).</span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sơ đồ kích thước bản vẽ kỹ thuật -->
+    <div class="diy-card">
+      <h2>📐 2. Bản Vẽ Kích Thước Kỹ Thuật Trên Bìa Carton A2 (42 × 60 cm)</h2>
+      <p style="font-size:0.88rem; color:#cbd5e1;">
+        Để bảng cân đối và dễ nhìn từ cuối lớp, nhóm tập trung làm <strong>20 thẻ lật 3D cho 20 nguyên tố đầu tiên</strong> (Chu kỳ 1 đến Chu kỳ 4, từ Nhóm IA đến VIIIA):
+      </p>
+      <div class="blueprint-box">
+        <div style="font-weight:800; color:#facc15; margin-bottom:6px;">SƠ ĐỒ CHIA TỶ LỆ MẶT BẢNG A2 (NGANG 60 CM × CAO 42 CM)</div>
+        <p style="font-size:0.83rem; color:#e2e8f0;">
+          • <strong>Lề trên cùng (Cao 8 cm):</strong> Ghi tiêu đề lớn <em>"BẢNG TUẦN HOÀN TRONG TẦM TAY"</em> + Dán 1 Mã QR Tổng dẫn vào Web.<br>
+          • <strong>Hàng tiêu đề Nhóm (Cao 4 cm):</strong> Chia 8 cột ngang ghi rõ <strong>Nhóm IA, IIA, IIIA, IVA, VA, VIA, VIIA, VIIIA</strong>.<br>
+          • <strong>Cột tiêu đề Chu kỳ bên trái (Rộng 6 cm):</strong> Chia 4 hàng dọc ghi rõ <strong>Chu kỳ 1, Chu kỳ 2, Chu kỳ 3, Chu kỳ 4</strong>.<br>
+          • <strong>Lưới 20 Ô Nguyên Tố (8 cột × 4 hàng):</strong> Mỗi ô nguyên tố là một hình vuông <strong>6 × 6 cm</strong> (8 cột × 6 cm = 48 cm chiều ngang; 4 hàng × 6 cm = 24 cm chiều dọc).
+        </p>
+      </div>
+    </div>
+
+    <!-- Cấu tạo thẻ lật 3 lớp -->
+    <div class="diy-card">
+      <h2>🃏 3. Cấu Tạo Mỗi Ô "Cửa Sổ Lật 3 Lớp" (Dải Giấy 6 × 18 cm Gấp Chữ Z)</h2>
+      <p style="font-size:0.88rem; color:#cbd5e1;">
+        Thay vì cắt 3 mảnh rời tốn công dán bản lề, bạn chỉ cần cắt 1 dải giấy màu kích thước <strong>6 × 18 cm</strong>, chia làm 3 đoạn <strong>6 × 6 cm</strong> rồi gấp zic-zắc (chữ Z):
+      </p>
+      <div class="flip-demo-grid">
+        <div class="flip-layer" style="border-color:#ef4444;">
+          <strong>LỚP 1 (Mặt Ngoài Cùng - 6×6 cm)</strong>
+          <p style="font-size:0.82rem; color:#cbd5e1;">
+            • Ghi <strong>Ký hiệu hóa học</strong> thật to ở giữa (VD: Na, Al, C).<br>
+            • Góc trên trái ghi <strong>Số hiệu Z</strong>, góc trên phải ghi <strong>Nguyên tử khối</strong>.<br>
+            • Dưới cùng ghi <strong>Tên nguyên tố</strong> chuẩn IUPAC.
+          </p>
+        </div>
+        <div class="flip-layer" style="border-color:#38bdf8;">
+          <strong>LỚP 2 (Lật Mở Ra - 6×6 cm)</strong>
+          <p style="font-size:0.82rem; color:#cbd5e1;">
+            • Ghi <strong>Cấu hình electron</strong> (VD: 1s² 2s² 2p⁶ 3s¹).<br>
+            • Vẽ nhanh các vòng tròn đồng tâm biểu diễn <strong>số lớp e (Chu kỳ)</strong> và <strong>số e lớp ngoài cùng (Nhóm)</strong>.<br>
+            • Ghi <strong>Bán kính nguyên tử (pm)</strong>.
+          </p>
+        </div>
+        <div class="flip-layer" style="border-color:#10b981;">
+          <strong>LỚP 3 (Đế Trong Cùng - 6×6 cm)</strong>
+          <p style="font-size:0.82rem; color:#cbd5e1;">
+            • <strong>Nửa bên trái:</strong> Dán <strong>Vật mẫu thật</strong> bằng băng dính trong hoặc túi zip mini.<br>
+            • <strong>Nửa bên phải:</strong> Dán <strong>Mã QR riêng</strong> của nguyên tố đó để quét mở Mô hình 3D trên điện thoại.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quy trình 4 bước thi công -->
+    <div class="diy-card">
+      <h2>🛠️ 4. Hướng Dẫn Thi Công Chi Tiết Từng Bước (Làm Xong Trong 1 Buổi)</h2>
+      <div class="diy-grid-2">
+        <div class="step-card">
+          <span class="step-badge">BƯỚC 1 (30 Phút)</span>
+          <h3>Bọc nền & Kẻ khung Bảng Tuần Hoàn</h3>
+          <ul>
+            <li>Cắt tấm bìa carton phẳng 42 × 60 cm, bọc giấy màu sáng hoặc giấy trắng làm nền.</li>
+            <li>Dùng thước và bút dạ kẻ bảng 4 hàng Chu kỳ × 8 cột Nhóm A (mỗi ô 6 × 6 cm).</li>
+            <li>Lưu ý ở Chu kỳ 1 chỉ giữ lại ô cột IA (cho H) và cột VIIIA (cho He), các ô giữa để trống đúng cấu tạo bảng tuần hoàn.</li>
+          </ul>
+        </div>
+
+        <div class="step-card">
+          <span class="step-badge">BƯỚC 2 (45 Phút)</span>
+          <h3>Cắt & Gấp 20 Phôi Thẻ Lật Chữ Z</h3>
+          <ul>
+            <li>Dùng giấy bìa màu Đỏ/Hồng cắt 7 dải (6 × 18 cm) cho 7 Kim loại (Li, Be, Na, Mg, Al, K, Ca).</li>
+            <li>Dùng giấy bìa Xanh dương cắt 10 dải cho Phi kim & Bán kim (H, B, C, N, O, F, Si, P, S, Cl).</li>
+            <li>Dùng giấy bìa Vàng cắt 3 dải cho 3 Khí hiếm (He, Ne, Ar). Gấp mỗi dải làm 3 phần đều nhau (6 × 6 cm).</li>
+          </ul>
+        </div>
+
+        <div class="step-card">
+          <span class="step-badge">BƯỚC 3 (45 Phút)</span>
+          <h3>Viết Thông Số & Đính Vật Mẫu Thật</h3>
+          <ul>
+            <li>Chép thông tin từ Bảng tra cứu ở Mục 5 bên dưới vào Mặt 1 và Mặt 2 của từng thẻ.</li>
+            <li>Ở Mặt 3, dùng băng dính trong cố định mẫu vật nhỏ (mẩu ruột chì, giấy bạc, hạt muối, dây đồng...) vào nửa bên trái.</li>
+          </ul>
+        </div>
+
+        <div class="step-card">
+          <span class="step-badge">BƯỚC 4 (20 Phút)</span>
+          <h3>In Mã QR & Lắp Ráp Tháo Rời Linh Hoạt</h3>
+          <ul>
+            <li>Chuyển sang <strong>Mục 1</strong>, bấm nút hồng <strong>"🖨️ Tạo QR Từng Nguyên Tố"</strong> để in 20 mã QR, cắt dán vào nửa phải Mặt 3.</li>
+            <li>Dán băng nhám Velcro (hoặc băng dính xốp 2 mặt) vào mặt sau của thẻ rồi gắn lên bảng carton để có thể tháo rời chơi Mini-Game trên lớp.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bảng tra cứu 20 nguyên tố kèm gợi ý vật mẫu thật -->
+    <div class="diy-card">
+      <h2>📋 5. Bảng Nội Dung Chép Vào Thẻ & Gợi Ý Vật Mẫu Thật (20 Nguyên Tố Đầu)</h2>
+      <div class="sample-table-wrap">
+        <table class="sample-table">
+          <thead>
+            <tr>
+              <th>Z</th>
+              <th>Ký hiệu</th>
+              <th>Chu kỳ / Nhóm</th>
+              <th>Cấu hình e (Lớp e)</th>
+              <th>Bán kính</th>
+              <th>Vật mẫu thật dễ kiếm để dán vào Lớp 3</th>
+            </tr>
+          </thead>
+          <tbody id="diySampleTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div> <!-- Đóng Mục 2 -->
+
+<!-- MODAL CHI TIẾT NGUYÊN TỬ + MÔ HÌNH 3D TƯƠNG TÁC -->
+<div class="overlay" id="overlay" onclick="closeM()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <button class="close" onclick="closeM()">&times;</button>
+    <div class="m-head">
+      <div class="m-box" id="m-sym">Na</div>
+      <div>
+        <h2 id="m-name" style="font-size:1.2rem;">Sodium (Natri)</h2>
+        <p id="m-type" style="font-size:0.82rem; color:#94a3b8;"></p>
+      </div>
+    </div>
+
+    <!-- KHUNG MÔ HÌNH 3D NGUYÊN TỬ -->
+    <div class="atom-3d-wrapper">
+      <div class="atom-3d-toolbar">
+        <button class="mode-3d-btn active" id="btnModeOrbit" onclick="setAtomViewMode('orbit')">🌀 3D Đa Quỹ Đạo</button>
+        <button class="mode-3d-btn" id="btnModePlane" onclick="setAtomViewMode('plane')">🪐 3D Lớp Đồng Tâm</button>
+        <button class="mode-3d-btn" id="btnMode2D" onclick="setAtomViewMode('2d')">🎯 2D Chuẩn SGK</button>
+        <button class="mode-3d-btn" id="btnPauseAtom" onclick="toggleAtomPause()">⏸️ Dừng e⁻</button>
+      </div>
+      <canvas id="atomCanvas" width="340" height="240"></canvas>
+      <div class="shell-badge-bar" id="shellBadges"></div>
+      <div class="atom-3d-hint">👆 Dùng ngón tay hoặc chuột kéo trên hình để xoay mô hình nguyên tử 360°</div>
+    </div>
+
+    <ul class="m-list">
+      <li><strong>Số hiệu nguyên tử (Z):</strong> <span id="m-z"></span> | <strong>Nguyên tử khối:</strong> <span id="m-mass"></span></li>
+      <li><strong>Vị trí trong bảng:</strong> Chu kỳ <span id="m-p"></span> (<span id="m-p2"></span> lớp e) — Nhóm <span id="m-g"></span></li>
+      <li><strong>Cấu hình electron:</strong> <span id="m-cfg"></span></li>
+      <li><strong>Bán kính nguyên tử:</strong> <span id="m-rad"></span> pm | <strong>Độ âm điện:</strong> <span id="m-electroneg"></span></li>
+      <li><strong>Ứng dụng thực tế:</strong> <span id="m-app"></span></li>
+    </ul>
+    <div class="modal-actions">
+      <button class="add-cmp-btn" id="m-add-cmp">🧲 Thả vào Ô So sánh</button>
+      <a href="#" target="_blank" class="yt" id="m-yt">▶ Xem Video Thí Nghiệm</a>
+    </div>
+  </div>
+</div>
+
+<script>
+const raw = [
+  [1,"H","Hydrogen",1.008,1,1],[2,"He","Helium",4.003,1,18],
+  [3,"Li","Lithium",6.94,2,1],[4,"Be","Beryllium",9.012,2,2],[5,"B","Boron",10.81,2,13],[6,"C","Carbon",12.01,2,14],[7,"N","Nitrogen",14.01,2,15],[8,"O","Oxygen",16.00,2,16],[9,"F","Fluorine",19.00,2,17],[10,"Ne","Neon",20.18,2,18],
+  [11,"Na","Sodium (Natri)",22.99,3,1],[12,"Mg","Magnesium",24.31,3,2],[13,"Al","Aluminium (Nhôm)",26.98,3,13],[14,"Si","Silicon",28.09,3,14],[15,"P","Phosphorus",30.97,3,15],[16,"S","Sulfur (Lưu huỳnh)",32.06,3,16],[17,"Cl","Chlorine",35.45,3,17],[18,"Ar","Argon",39.95,3,18],
+  [19,"K","Potassium (Kali)",39.10,4,1],[20,"Ca","Calcium (Canxi)",40.08,4,2],[21,"Sc","Scandium",44.96,4,3],[22,"Ti","Titanium",47.87,4,4],[23,"V","Vanadium",50.94,4,5],[24,"Cr","Chromium (Crom)",52.00,4,6],[25,"Mn","Manganese",54.94,4,7],[26,"Fe","Iron (Sắt)",55.85,4,8],[27,"Co","Cobalt",58.93,4,9],[28,"Ni","Nickel",58.69,4,10],[29,"Cu","Copper (Đồng)",63.55,4,11],[30,"Zn","Zinc (Kẽm)",65.38,4,12],[31,"Ga","Gallium",69.72,4,13],[32,"Ge","Germanium",72.63,4,14],[33,"As","Arsenic",74.92,4,15],[34,"Se","Selenium",78.97,4,16],[35,"Br","Bromine",79.90,4,17],[36,"Kr","Krypton",83.80,4,18],
+  [37,"Rb","Rubidium",85.47,5,1],[38,"Sr","Strontium",87.62,5,2],[39,"Y","Yttrium",88.91,5,3],[40,"Zr","Zirconium",91.22,5,4],[41,"Nb","Niobium",92.91,5,5],[42,"Mo","Molybdenum",95.95,5,6],[43,"Tc","Technetium",98,5,7],[44,"Ru","Ruthenium",101.1,5,8],[45,"Rh","Rhodium",102.9,5,9],[46,"Pd","Palladium",106.4,5,10],[47,"Ag","Silver (Bạc)",107.9,5,11],[48,"Cd","Cadmium",112.4,5,12],[49,"In","Indium",114.8,5,13],[50,"Sn","Tin (Thiếc)",118.7,5,14],[51,"Sb","Antimony",121.8,5,15],[52,"Te","Tellurium",127.6,5,16],[53,"I","Iodine",126.9,5,17],[54,"Xe","Xenon",131.3,5,18],
+  [55,"Cs","Caesium",132.9,6,1],[56,"Ba","Barium",137.3,6,2],
+  [57,"La","Lanthanum",138.9,8,4],[58,"Ce","Cerium",140.1,8,5],[59,"Pr","Praseodymium",140.9,8,6],[60,"Nd","Neodymium",144.2,8,7],[61,"Pm","Promethium",145,8,8],[62,"Sm","Samarium",150.4,8,9],[63,"Eu","Europium",152.0,8,10],[64,"Gd","Gadolinium",157.3,8,11],[65,"Tb","Terbium",158.9,8,12],[66,"Dy","Dysprosium",162.5,8,13],[67,"Ho","Holmium",164.9,8,14],[68,"Er","Erbium",167.3,8,15],[69,"Tm","Thulium",168.9,8,16],[70,"Yb","Ytterbium",173.0,8,17],[71,"Lu","Lutetium",175.0,8,18],
+  [72,"Hf","Hafnium",178.5,6,4],[73,"Ta","Tantalum",180.9,6,5],[74,"W","Tungsten (Vonfram)",183.8,6,6],[75,"Re","Rhenium",186.2,6,7],[76,"Os","Osmium",190.2,6,8],[77,"Ir","Iridium",192.2,6,9],[78,"Pt","Platinum (Bạch kim)",195.1,6,10],[79,"Au","Gold (Vàng)",197.0,6,11],[80,"Hg","Mercury (Thủy ngân)",200.6,6,12],[81,"Tl","Thallium",204.4,6,13],[82,"Pb","Lead (Chì)",207.2,6,14],[83,"Bi","Bismuth",209.0,6,15],[84,"Po","Polonium",209,6,16],[85,"At","Astatine",210,6,17],[86,"Rn","Radon",222,6,18],
+  [87,"Fr","Francium",223,7,1],[88,"Ra","Radium",226,7,2],
+  [89,"Ac","Actinium",227,9,4],[90,"Th","Thorium",232.0,9,5],[91,"Pa","Protactinium",231.0,9,6],[92,"U","Uranium",238.0,9,7],[93,"Np","Neptunium",237,9,8],[94,"Pu","Plutonium",244,9,9],[95,"Am","Americium",243,9,10],[96,"Cm","Curium",247,9,11],[97,"Bk","Berkelium",247,9,12],[98,"Cf","Californium",251,9,13],[99,"Es","Einsteinium",252,9,14],[100,"Fm","Fermium",257,9,15],[101,"Md","Mendelevium",258,9,16],[102,"No","Nobelium",259,9,17],[103,"Lr","Lawrencium",266,9,18],
+  [104,"Rf","Rutherfordium",267,7,4],[105,"Db","Dubnium",268,7,5],[106,"Sg","Seaborgium",269,7,6],[107,"Bh","Bohrium",270,7,7],[108,"Hs","Hassium",277,7,8],[109,"Mt","Meitnerium",278,7,9],[110,"Ds","Darmstadtium",281,7,10],[111,"Rg","Roentgenium",282,7,11],[112,"Cn","Copernicium",285,7,12],[113,"Nh","Nihonium",286,7,13],[114,"Fl","Flerovium",289,7,14],[115,"Mc","Moscovium",290,7,15],[116,"Lv","Livermorium",293,7,16],[117,"Ts","Tennessine",294,7,17],[118,"Og","Oganesson",294,7,18]
+];
+
+const radii = {
+  1:[53, 2.20], 2:[31, "-"],
+  3:[167, 0.98], 4:[112, 1.57], 5:[87, 2.04], 6:[67, 2.55], 7:[56, 3.04], 8:[48, 3.44], 9:[42, 3.98], 10:[38, "-"],
+  11:[190, 0.93], 12:[145, 1.31], 13:[118, 1.61], 14:[111, 1.90], 15:[98, 2.19], 16:[88, 2.58], 17:[79, 3.16], 18:[71, "-"],
+  19:[243, 0.82], 20:[194, 1.00], 26:[126, 1.83], 29:[128, 1.90], 30:[134, 1.65], 31:[136, 1.81], 32:[125, 2.01], 33:[114, 2.18], 34:[103, 2.55], 35:[94, 2.96], 36:[88, "-"],
+  37:[265, 0.82], 38:[219, 0.95], 47:[144, 1.93], 49:[156, 1.78], 50:[145, 1.96], 51:[133, 2.05], 52:[123, 2.10], 53:[115, 2.66], 54:[108, "-"],
+  55:[298, 0.79], 56:[253, 0.89], 79:[144, 2.54], 80:[149, 2.00], 82:[146, 2.33], 85:[127, 2.20], 86:[120, "-"],
+  87:[348, 0.70], 88:[283, 0.90]
+};
+
+const customApp = {
+  1:"Nhiên liệu tên lửa, tạo nước (H₂O), pin nhiên liệu sạch.",
+  2:"Bơm bóng bay an toàn, làm lạnh nam châm siêu dẫn MRI.",
+  3:"Pin sạc Lithium-ion cho điện thoại, laptop, xe điện.",
+  4:"Hợp kim nhẹ trong hàng không vũ trụ, cửa sổ tia X.",
+  5:"Thủy tinh chịu nhiệt Pyrex, phân bón vi lượng.",
+  6:"Than chì (ruột bút chì), kim cương, than hoạt tính.",
+  7:"Chiếm 78% không khí, sản xuất phân đạm, bảo quản thực phẩm.",
+  8:"Duy trì sự hô hấp và sự cháy, bình dưỡng khí y tế.",
+  9:"Kem đánh răng chống sâu răng, lớp chống dính Teflon.",
+  10:"Đèn quảng cáo Neon phát sáng đỏ cam rực rỡ.",
+  11:"Thành phần chính của muối ăn (NaCl), đèn đường hơi Natri.",
+  12:"Pháo sáng, hợp kim vỏ máy tính/máy ảnh siêu nhẹ, diệp lục.",
+  13:"Giấy bạc bọc thức ăn, vỏ lon nước ngọt, thân máy bay.",
+  14:"Chip bán dẫn vi xử lý điện thoại/máy tính, pin mặt trời.",
+  15:"Vỏ bao diêm an toàn, phân lân nông nghiệp, cấu tạo xương.",
+  16:"Lưu hóa cao su làm lốp xe, sản xuất axit H₂SO₄.",
+  17:"Khử trùng nước sinh hoạt/hồ bơi, nước tẩy Javel, nhựa PVC.",
+  18:"Bơm vào bóng đèn sợi đốt bảo vệ dây tóc, khí hàn kim loại.",
+  19:"Phân bón Kali cho cây trồng, có nhiều trong chuối giúp ổn định nhịp tim.",
+  20:"Cấu tạo xương, răng, đá vôi (CaCO₃), xi măng, phấn viết bảng.",
+  26:"Lõi thép xây dựng, chế tạo máy móc, cầu đường, Hemoglobin trong máu.",
+  29:"Lõi dây dẫn điện, động cơ điện, hợp kim đồng thau.",
+  30:"Mạ kẽm chống gỉ tôn lợp mái, vỏ pin, kem chống nắng.",
+  47:"Trang sức bạc, chất dẫn điện và kháng khuẩn tự nhiên.",
+  79:"Trang sức vàng, dự trữ tài chính, mạ linh kiện điện tử cao cấp."
+};
+
+const groupNames = {
+  1:"1 (IA)", 2:"2 (IIA)", 3:"3 (IIIB)", 4:"4 (IVB)", 5:"5 (VB)", 6:"6 (VIB)",
+  7:"7 (VIIB)", 8:"8 (VIIIB)", 9:"9 (VIIIB)", 10:"10 (VIIIB)", 11:"11 (IB)", 12:"12 (IIB)",
+  13:"13 (IIIA)", 14:"14 (IVA)", 15:"15 (VA)", 16:"16 (VIA)", 17:"17 (VIIA)", 18:"18 (VIIIA)"
+};
+const shortGroup = {
+  1:"IA", 2:"IIA", 3:"IIIB", 4:"IVB", 5:"VB", 6:"VIB",
+  7:"VIIB", 8:"VIIIB", 9:"VIIIB", 10:"VIIIB", 11:"IB", 12:"IIB",
+  13:"IIIA", 14:"IVA", 15:"VA", 16:"VIA", 17:"VIIA", 18:"VIIIA"
+};
+
+const typeColors = {
+  metal: "#ef4444",
+  trans: "#f97316",
+  metalloid: "#10b981",
+  nonmetal: "#3b82f6",
+  noble: "#eab308",
+  rare: "#a855f7"
+};
+
+const metalloids = [5,14,32,33,51,52,84];
+const nonmetals = [1,6,7,8,9,15,16,17,34,35,53,85];
+
+// Hàm tính cấu hình electron & trả về số electron trên từng lớp (K, L, M, N, O, P, Q)
+function getConfigAndShells(z) {
+  const orbitals = [['1s',2],['2s',2],['2p',6],['3s',2],['3p',6],['4s',2],['3d',10],['4p',6],['5s',2],['4d',10],['5p',6],['6s',2],['4f',14],['5d',10],['6p',6],['7s',2],['5f',14],['6d',10],['7p',6]];
+  const ex = {24:{'4s':1,'3d':5}, 29:{'4s':1,'3d':10}, 42:{'5s':1,'4d':5}, 47:{'5s':1,'4d':10}, 79:{'6s':1,'5d':10}};
+  let rem = z, res = [], shells = {};
+  for (let [orb, max] of orbitals) {
+    if (rem <= 0) break;
+    let take = Math.min(rem, max);
+    if (ex[z] && ex[z][orb] !== undefined) take = ex[z][orb];
+    res.push(`${orb}<sup>${take}</sup>`);
+    let n = Number(orb[0]);
+    shells[n] = (shells[n] || 0) + take;
+    rem -= take;
+  }
+  const maxN = Math.max(...Object.keys(shells).map(Number));
+  const shellArr = [];
+  for (let i = 1; i <= maxN; i++) shellArr.push(shells[i] || 0);
+  return { cfg: res.join(' '), shells: shellArr };
+}
+
+const elements = raw.map(([z, sym, name, mass, row, col]) => {
+  let type = "trans", tName = "Kim loại chuyển tiếp";
+  if (row >= 8) { type = "rare"; tName = row === 8 ? "Họ Lantan (Đất hiếm)" : "Họ Actini (Phóng xạ)"; }
+  else if (col === 18) { type = "noble"; tName = "Khí hiếm"; }
+  else if (metalloids.includes(z)) { type = "metalloid"; tName = "Bán kim"; }
+  else if (nonmetals.includes(z)) { type = "nonmetal"; tName = "Phi kim"; }
+  else if (col <= 2 || col >= 13) { type = "metal"; tName = col === 1 ? "Kim loại kiềm" : (col === 2 ? "Kim loại kiềm thổ" : "Kim loại nhóm A"); }
+
+  let realPeriod = row === 8 ? 6 : (row === 9 ? 7 : row);
+  let grp = row >= 8 ? "3 (IIIB)" : groupNames[col];
+  let radInfo = radii[z] || [Math.round(115 + (realPeriod * 18) - (col * 3)), col === 18 ? "-" : (1.1 + col * 0.08).toFixed(2)];
+  let { cfg, shells } = getConfigAndShells(z);
+
+  return {
+    z, sym, name, mass, row, col, p: realPeriod, g: grp, type, tName,
+    cfg, shells,
+    rad: radInfo[0],
+    electroneg: radInfo[1] === "-" ? "Không có (Khí hiếm)" : radInfo[1],
+    app: customApp[z] || "Ứng dụng trong nghiên cứu khoa học, chế tạo hợp kim và công nghiệp kỹ thuật."
+  };
+});
+
+const ptable = document.getElementById("ptable");
+
+// 1. Tạo hàng tiêu đề Cột
+const corner = document.createElement("div");
+corner.className = "col-header";
+corner.innerHTML = "<span>CK / Nhóm</span>";
+ptable.appendChild(corner);
+
+for (let c = 1; c <= 18; c++) {
+  const ch = document.createElement("div");
+  ch.className = "col-header";
+  ch.innerHTML = `<span>${c}</span><span style="color:#facc15;font-size:0.58rem;">${shortGroup[c]}</span>`;
+  ptable.appendChild(ch);
+}
+
+// 2. Tạo nội dung các hàng
+const rowLabels = ["CK 1", "CK 2", "CK 3", "CK 4", "CK 5", "CK 6", "CK 7", "Lantan", "Actini"];
+for (let r = 1; r <= 9; r++) {
+  if (r === 8) {
+    const sp = document.createElement("div");
+    sp.className = "spacer-row";
+    ptable.appendChild(sp);
+  }
+  
+  const rh = document.createElement("div");
+  rh.className = "row-header";
+  rh.textContent = rowLabels[r-1];
+  ptable.appendChild(rh);
+
+  for (let c = 1; c <= 18; c++) {
+    const el = elements.find(e => e.row === r && e.col === c);
+    const cell = document.createElement("div");
+    if (el) {
+      cell.className = `el ${el.type}`;
+      cell.dataset.type = el.type;
+      cell.dataset.z = el.z;
+      cell.dataset.search = `${el.z} ${el.sym.toLowerCase()} ${el.name.toLowerCase()}`;
+      cell.draggable = true;
+      const badge3D = el.z <= 20 ? `<span class="badge-3d">3D</span>` : "";
+      cell.innerHTML = `<span class="z">${el.z}</span>${badge3D}<div class="sym">${el.sym}</div><div class="name">${el.name.split(' ')[0]}</div>`;
+      cell.onclick = () => openM(el);
+      cell.ondragstart = (ev) => {
+        ev.dataTransfer.setData("text/plain", String(el.z));
+      };
+    } else if (r === 6 && c === 3) {
+      cell.className = "el-placeholder";
+      cell.innerHTML = `<strong>57-71</strong><span>La-Lu</span>`;
+      cell.onclick = () => filterEl('rare', document.querySelector('.b-rare'));
+    } else if (r === 7 && c === 3) {
+      cell.className = "el-placeholder";
+      cell.innerHTML = `<strong>89-103</strong><span>Ac-Lr</span>`;
+      cell.onclick = () => filterEl('rare', document.querySelector('.b-rare'));
+    } else {
+      cell.style.visibility = "hidden";
+    }
+    ptable.appendChild(cell);
+  }
+}
+
+function filterEl(type, btn) {
+  document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+  if (btn) btn.classList.add("active");
+  document.querySelectorAll(".el").forEach(c => {
+    c.classList.toggle("dimmed", type !== "all" && c.dataset.type !== type);
+  });
+}
+
+function searchEl(val) {
+  const q = val.trim().toLowerCase();
+  document.querySelectorAll(".el").forEach(c => {
+    c.classList.toggle("dimmed", q !== "" && !c.dataset.search.includes(q));
+  });
+}
+
+// =========================================================
+// ENGINE MÔ HÌNH NGUYÊN TỬ 3D TƯƠNG TÁC (20 NGUYÊN TỐ ĐẦU & CẢ 118 NGUYÊN TỐ)
+// =========================================================
+const atomCanvas = document.getElementById("atomCanvas");
+const ctx = atomCanvas.getContext("2d");
+let activeAtomEl = null;
+let atomAnimId = null;
+let atomViewMode = "orbit"; // 'orbit' (3D đa quỹ đạo), 'plane' (3D lớp đồng tâm), '2d' (2D Bohr SGK)
+let atomPaused = false;
+let rotX = 0.45, rotY = 0.35;
+let isDraggingAtom = false, lastMouseX = 0, lastMouseY = 0;
+let nucleons = [];
+let atomAngleTime = 0;
+
+const shellNames = ["K (n=1)", "L (n=2)", "M (n=3)", "N (n=4)", "O (n=5)", "P (n=6)", "Q (n=7)"];
+const shellColors = ["#38bdf8", "#4ade80", "#facc15", "#f97316", "#ec4899", "#a855f7", "#ef4444"];
+
+function initNucleons(z) {
+  nucleons = [];
+  // Với 20 nguyên tố đầu, tạo cụm hạt nhân 3D gồm Proton (đỏ) và Neutron (xanh xám)
+  const count = Math.min(z * 2, 28);
+  for (let i = 0; i < count; i++) {
+    const phi = Math.acos(1 - 2 * (i + 0.5) / count);
+    const theta = Math.PI * (1 + Math.sqrt(5)) * i;
+    const r = z === 1 ? 0 : Math.min(11, 4 + Math.cbrt(z) * 2.2);
+    nucleons.push({
+      x: r * Math.sin(phi) * Math.cos(theta),
+      y: r * Math.sin(phi) * Math.sin(theta),
+      z: r * Math.cos(phi),
+      isProton: i % 2 === 0
+    });
+  }
+}
+
+function setAtomViewMode(mode) {
+  atomViewMode = mode;
+  document.getElementById("btnModeOrbit").classList.toggle("active", mode === "orbit");
+  document.getElementById("btnModePlane").classList.toggle("active", mode === "plane");
+  document.getElementById("btnMode2D").classList.toggle("active", mode === "2d");
+  if (mode === "plane") {
+    rotX = 0.95;
+    rotY = 0.2;
+  } else if (mode === "orbit") {
+    rotX = 0.45;
+    rotY = 0.35;
+  }
+}
+
+function toggleAtomPause() {
+  atomPaused = !atomPaused;
+  const btn = document.getElementById("btnPauseAtom");
+  btn.textContent = atomPaused ? "▶️ Chạy e⁻" : "⏸️ Dừng e⁻";
+  btn.classList.toggle("active", atomPaused);
+}
+
+// Xoay điểm 3D (x, y, z) theo góc camera rotX, rotY
+function project3D(x, y, z, cx, cy) {
+  // Xoay quanh trục Y
+  let x1 = x * Math.cos(rotY) + z * Math.sin(rotY);
+  let z1 = -x * Math.sin(rotY) + z * Math.cos(rotY);
+  // Xoay quanh trục X
+  let y2 = y * Math.cos(rotX) - z1 * Math.sin(rotX);
+  let z2 = y * Math.sin(rotX) + z1 * Math.cos(rotX);
+
+  const fov = 320;
+  const scale = fov / (fov + z2);
+  return {
+    px: cx + x1 * scale,
+    py: cy + y2 * scale,
+    z: z2,
+    scale: scale
+  };
+}
+
+function renderAtomFrame() {
+  if (!activeAtomEl) return;
+  const w = atomCanvas.width;
+  const h = atomCanvas.height;
+  const cx = w / 2;
+  const cy = h / 2;
+
+  ctx.clearRect(0, 0, w, h);
+
+  if (!atomPaused) {
+    atomAngleTime += 0.022;
+    if (!isDraggingAtom && atomViewMode !== "2d") {
+      rotY += 0.0045;
+    }
+  }
+
+  const shells = activeAtomEl.shells;
+  const numShells = shells.length;
+  const maxRadius = Math.min(cx, cy) - 24;
+  const minRadius = 30;
+  const stepR = numShells > 1 ? (maxRadius - minRadius) / (numShells - 1) : 0;
+
+  // Danh sách các hạt sẽ vẽ theo thứ tự chiều sâu Z (Painter's Algorithm)
+  const renderQueue = [];
+
+  // 1. Đưa cụm hạt nhân Proton & Neutron vào hàng đợi
+  nucleons.forEach(n => {
+    const p = atomViewMode === "2d"
+      ? { px: cx + n.x * 0.6, py: cy + n.y * 0.6, z: n.z, scale: 1 }
+      : project3D(n.x, n.y, n.z, cx, cy);
+    renderQueue.push({
+      type: "nucleon",
+      px: p.px,
+      py: p.py,
+      z: p.z,
+      r: 4.2 * p.scale,
+      color: n.isProton ? "#ef4444" : "#64748b"
+    });
+  });
+
+  // 2. Vẽ các vành quỹ đạo & tính vị trí 3D của từng electron
+  shells.forEach((eCount, sIdx) => {
+    const r = numShells === 1 ? 58 : minRadius + sIdx * stepR;
+    const color = shellColors[sIdx % shellColors.length];
+
+    // Góc nghiêng riêng của từng lớp trong chế độ 'orbit' (3D đa quỹ đạo)
+    let tiltX = 0, tiltY = 0;
+    if (atomViewMode === "orbit") {
+      tiltX = (sIdx * 0.68) + 0.3;
+      tiltY = (sIdx * 0.95) - 0.4;
+    }
+
+    // Vẽ đường quỹ đạo elip 3D
+    ctx.beginPath();
+    const segments = 72;
+    for (let i = 0; i <= segments; i++) {
+      const a = (i / segments) * Math.PI * 2;
+      let ox = r * Math.cos(a);
+      let oy = r * Math.sin(a);
+      let oz = 0;
+
+      if (atomViewMode === "orbit") {
+        // Xoay mặt phẳng quỹ đạo riêng của lớp sIdx
+        let ty = oy * Math.cos(tiltX);
+        let tz = oy * Math.sin(tiltX);
+        let tx = ox * Math.cos(tiltY) + tz * Math.sin(tiltY);
+        tz = -ox * Math.sin(tiltY) + tz * Math.cos(tiltY);
+        ox = tx; oy = ty; oz = tz;
+      }
+
+      const proj = atomViewMode === "2d"
+        ? { px: cx + ox, py: cy + oy }
+        : project3D(ox, oy, oz, cx, cy);
+
+      if (i === 0) ctx.moveTo(proj.px, proj.py);
+      else ctx.lineTo(proj.px, proj.py);
+    }
+    ctx.strokeStyle = color + "55";
+    ctx.lineWidth = 1.4;
+    ctx.stroke();
+
+    // Tính tọa độ từng hạt electron trên lớp sIdx
+    const speed = (1.3 - sIdx * 0.14) * (sIdx % 2 === 0 ? 1 : -1);
+    for (let j = 0; j < eCount; j++) {
+      const angle = (j / eCount) * Math.PI * 2 + atomAngleTime * speed;
+      let ex = r * Math.cos(angle);
+      let ey = r * Math.sin(angle);
+      let ez = 0;
+
+      if (atomViewMode === "orbit") {
+        let ty = ey * Math.cos(tiltX);
+        let tz = ey * Math.sin(tiltX);
+        let tx = ex * Math.cos(tiltY) + tz * Math.sin(tiltY);
+        tz = -ex * Math.sin(tiltY) + tz * Math.cos(tiltY);
+        ex = tx; ey = ty; ez = tz;
+      }
+
+      const proj = atomViewMode === "2d"
+        ? { px: cx + ex, py: cy + ey, z: 0, scale: 1 }
+        : project3D(ex, ey, ez, cx, cy);
+
+      renderQueue.push({
+        type: "electron",
+        px: proj.px,
+        py: proj.py,
+        z: proj.z,
+        r: Math.max(3.2, 4.8 * proj.scale),
+        color: color,
+        isOuter: sIdx === numShells - 1
+      });
+    }
+  });
+
+  // Sắp xếp từ xa đến gần (z lớn vẽ trước, z nhỏ vẽ sau)
+  renderQueue.sort((a, b) => b.z - a.z);
+
+  // 3. Render toàn bộ hạt nhân & electron theo chiều sâu 3D
+  renderQueue.forEach(item => {
+    ctx.beginPath();
+    ctx.arc(item.px, item.py, item.r, 0, Math.PI * 2);
+    if (item.type === "nucleon") {
+      ctx.fillStyle = item.color;
+      ctx.fill();
+      ctx.strokeStyle = "rgba(0,0,0,0.4)";
+      ctx.lineWidth = 0.8;
+      ctx.stroke();
+    } else {
+      ctx.fillStyle = item.color;
+      ctx.shadowColor = item.color;
+      ctx.shadowBlur = item.isOuter ? 10 : 5;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+      ctx.fillStyle = "#ffffff";
+      ctx.beginPath();
+      ctx.arc(item.px - item.r * 0.25, item.py - item.r * 0.25, item.r * 0.35, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  });
+
+  // Nhãn Z+ ở tâm hạt nhân
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "bold 11px sans-serif";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.shadowColor = "#000";
+  ctx.shadowBlur = 4;
+  ctx.fillText(`${activeAtomEl.z}+`, cx, cy);
+  ctx.shadowBlur = 0;
+
+  atomAnimId = requestAnimationFrame(renderAtomFrame);
+}
+
+// Sự kiện kéo chuột & vuốt cảm ứng để xoay mô hình 3D
+atomCanvas.addEventListener("mousedown", (e) => {
+  isDraggingAtom = true;
+  lastMouseX = e.clientX;
+  lastMouseY = e.clientY;
+});
+window.addEventListener("mousemove", (e) => {
+  if (!isDraggingAtom) return;
+  const dx = e.clientX - lastMouseX;
+  const dy = e.clientY - lastMouseY;
+  rotY += dx * 0.01;
+  rotX = Math.max(-1.5, Math.min(1.5, rotX + dy * 0.01));
+  lastMouseX = e.clientX;
+  lastMouseY = e.clientY;
+});
+window.addEventListener("mouseup", () => { isDraggingAtom = false; });
+
+atomCanvas.addEventListener("touchstart", (e) => {
+  if (e.touches.length === 1) {
+    isDraggingAtom = true;
+    lastMouseX = e.touches[0].clientX;
+    lastMouseY = e.touches[0].clientY;
+  }
+}, {passive: true});
+atomCanvas.addEventListener("touchmove", (e) => {
+  if (!isDraggingAtom || e.touches.length !== 1) return;
+  e.preventDefault();
+  const dx = e.touches[0].clientX - lastMouseX;
+  const dy = e.touches[0].clientY - lastMouseY;
+  rotY += dx * 0.012;
+  rotX = Math.max(-1.5, Math.min(1.5, rotX + dy * 0.012));
+  lastMouseX = e.touches[0].clientX;
+  lastMouseY = e.touches[0].clientY;
+}, {passive: false});
+atomCanvas.addEventListener("touchend", () => { isDraggingAtom = false; });
+
+function openM(el) {
+  document.getElementById("m-sym").textContent = el.sym;
+  document.getElementById("m-name").textContent = el.name;
+  document.getElementById("m-type").textContent = el.tName;
+  document.getElementById("m-z").textContent = el.z;
+  document.getElementById("m-mass").textContent = el.mass;
+  document.getElementById("m-p").textContent = el.p;
+  document.getElementById("m-p2").textContent = el.p;
+  document.getElementById("m-g").textContent = el.g;
+  document.getElementById("m-cfg").innerHTML = el.cfg;
+  document.getElementById("m-rad").textContent = el.rad;
+  document.getElementById("m-electroneg").textContent = el.electroneg;
+  document.getElementById("m-app").textContent = el.app;
+  document.getElementById("m-yt").href = `https://www.youtube.com/results?search_query=Element+${el.sym}+${el.name.split(' ')[0]}+experiment`;
+  
+  // Hiển thị phân bố electron từng lớp (K, L, M, N...)
+  const badgeBox = document.getElementById("shellBadges");
+  badgeBox.innerHTML = el.shells.map((cnt, i) => `
+    <span class="shell-badge" style="border-color:${shellColors[i]}; color:${shellColors[i]};">
+      Lớp ${shellNames[i]}: ${cnt}e⁻
+    </span>
+  `).join("");
+
+  const addBtn = document.getElementById("m-add-cmp");
+  addBtn.onclick = () => {
+    addElementToNextSlot(el.z);
+    closeM();
+    document.getElementById("compareSection").scrollIntoView({behavior: "smooth"});
+  };
+
+  document.getElementById("overlay").style.display = "flex";
+
+  // Khởi chạy Mô hình 3D của nguyên tố
+  activeAtomEl = el;
+  initNucleons(el.z);
+  if (atomAnimId) cancelAnimationFrame(atomAnimId);
+  renderAtomFrame();
+}
+
+function closeM() {
+  document.getElementById("overlay").style.display = "none";
+  if (atomAnimId) {
+    cancelAnimationFrame(atomAnimId);
+    atomAnimId = null;
+  }
+  activeAtomEl = null;
+}
+
+// ==========================================
+// HỆ THỐNG KÉO THẢ (DRAG & DROP) TRÊN CẢ PC VÀ ĐIỆN THOẠI
+// ==========================================
+let slotState = [11, 12, 13, 17];
+let nextReplaceIdx = 0;
+
+function renderPalette(query = "") {
+  const q = query.trim().toLowerCase();
+  const listEl = document.getElementById("paletteList");
+  const defaultSet = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,26,29,30,35,37,47,53,55,79];
+  const filtered = q === ""
+    ? elements.filter(e => defaultSet.includes(e.z))
+    : elements.filter(e => `${e.z} ${e.sym.toLowerCase()} ${e.name.toLowerCase()}`.includes(q));
+
+  listEl.innerHTML = "";
+  filtered.forEach(e => {
+    const chip = document.createElement("div");
+    chip.className = "drag-chip";
+    chip.style.borderColor = typeColors[e.type] || "#475569";
+    chip.draggable = true;
+    chip.dataset.z = e.z;
+    chip.innerHTML = `
+      <span class="chip-z">Z=${e.z}</span>
+      <span>${e.sym}</span>
+      <span class="chip-rad">${e.rad} pm</span>
+    `;
+
+    chip.addEventListener("dragstart", (ev) => {
+      ev.dataTransfer.setData("text/plain", String(e.z));
+    });
+
+    chip.addEventListener("click", () => {
+      addElementToNextSlot(e.z);
+    });
+
+    setupTouchDrag(chip, e);
+    listEl.appendChild(chip);
+  });
+}
+
+let ghostEl = null;
+let touchDraggedZ = null;
+let isTouchMoving = false;
+
+function setupTouchDrag(domNode, elData) {
+  domNode.addEventListener("touchstart", (ev) => {
+    touchDraggedZ = elData.z;
+    isTouchMoving = false;
+  }, {passive: true});
+
+  domNode.addEventListener("touchmove", (ev) => {
+    if (!touchDraggedZ) return;
+    const touch = ev.touches[0];
+    if (!isTouchMoving) {
+      isTouchMoving = true;
+      ghostEl = document.createElement("div");
+      ghostEl.className = "touch-ghost";
+      ghostEl.innerHTML = `🧲 ${elData.sym} (Z=${elData.z} | ${elData.rad} pm)`;
+      document.body.appendChild(ghostEl);
+    }
+    ev.preventDefault();
+    ghostEl.style.left = touch.clientX + "px";
+    ghostEl.style.top = touch.clientY + "px";
+
+    document.querySelectorAll(".drop-slot").forEach(s => s.classList.remove("drag-over"));
+    const target = document.elementFromPoint(touch.clientX, touch.clientY);
+    const slot = target ? target.closest(".drop-slot") : null;
+    if (slot) slot.classList.add("drag-over");
+  }, {passive: false});
+
+  domNode.addEventListener("touchend", (ev) => {
+    if (isTouchMoving && ghostEl) {
+      const touch = ev.changedTouches[0];
+      const target = document.elementFromPoint(touch.clientX, touch.clientY);
+      const slot = target ? target.closest(".drop-slot") : null;
+      document.querySelectorAll(".drop-slot").forEach(s => s.classList.remove("drag-over"));
+      if (slot) {
+        const idx = Number(slot.dataset.slot);
+        slotState[idx] = touchDraggedZ;
+        renderSlotsAndComparison();
+      }
+      ghostEl.remove();
+      ghostEl = null;
+    }
+    touchDraggedZ = null;
+    isTouchMoving = false;
+  });
+}
+
+function initDropSlots() {
+  document.querySelectorAll(".drop-slot").forEach(slot => {
+    const idx = Number(slot.dataset.slot);
+
+    slot.addEventListener("dragover", (ev) => {
+      ev.preventDefault();
+      slot.classList.add("drag-over");
+    });
+
+    slot.addEventListener("dragleave", () => {
+      slot.classList.remove("drag-over");
+    });
+
+    slot.addEventListener("drop", (ev) => {
+      ev.preventDefault();
+      slot.classList.remove("drag-over");
+      const z = Number(ev.dataTransfer.getData("text/plain"));
+      if (z > 0) {
+        slotState[idx] = z;
+        renderSlotsAndComparison();
+      }
+    });
+  });
+}
+
+function addElementToNextSlot(z) {
+  const emptyIdx = slotState.findIndex(v => v === 0);
+  if (emptyIdx !== -1) {
+    slotState[emptyIdx] = z;
+  } else {
+    slotState[nextReplaceIdx % 4] = z;
+    nextReplaceIdx++;
+  }
+  renderSlotsAndComparison();
+}
+
+function removeSlot(idx, ev) {
+  ev.stopPropagation();
+  slotState[idx] = 0;
+  renderSlotsAndComparison();
+}
+
+function applyPreset(zArr) {
+  slotState = [zArr[0] || 0, zArr[1] || 0, zArr[2] || 0, zArr[3] || 0];
+  renderSlotsAndComparison();
+}
+
+function renderSlotsAndComparison() {
+  document.querySelectorAll(".drop-slot").forEach(slot => {
+    const idx = Number(slot.dataset.slot);
+    const z = slotState[idx];
+    const el = elements.find(e => e.z === z);
+
+    if (el) {
+      slot.className = "drop-slot filled";
+      slot.style.borderColor = typeColors[el.type] || "#38bdf8";
+      slot.innerHTML = `
+        <button class="slot-remove" title="Xóa khỏi ô" onclick="removeSlot(${idx}, event)">&times;</button>
+        <div class="slot-el-sym">${el.sym} <span style="font-size:0.8rem;color:#94a3b8;font-weight:600;">(Z=${el.z})</span></div>
+        <div class="slot-el-name">${el.name.split(' ')[0]} — CK ${el.p}, Nhóm ${shortGroup[el.col]}</div>
+        <div class="slot-el-rad">Bán kính: ${el.rad} pm</div>
+      `;
+    } else {
+      slot.className = "drop-slot";
+      slot.style.borderColor = "#475569";
+      slot.innerHTML = `
+        <div class="slot-empty-text">
+          <strong>Ô Thả Nguyên Tố #${idx + 1}</strong>
+          Kéo nguyên tố thả vào đây
+        </div>
+      `;
+    }
+  });
+
+  const chosenEls = slotState.filter(v => v > 0).map(z => elements.find(e => e.z === z)).filter(Boolean);
+  const stage = document.getElementById("visualStage");
+  const conclusion = document.getElementById("compareConclusion");
+
+  if (chosenEls.length < 2) {
+    stage.innerHTML = `<p style="color:#94a3b8;padding:20px;">🧲 Hãy kéo thả ít nhất <strong>2 nguyên tố</strong> vào các ô phía trên để so sánh bán kính nguyên tử.</p>`;
+    conclusion.innerHTML = `📌 <strong>Hướng dẫn:</strong> Bạn có thể giữ ngón tay vào các thẻ nguyên tố trên <em>Khay Kéo Thả</em> rồi kéo thẳng xuống các ô trống, hoặc chạm nhẹ vào thẻ để tự động lấp vào ô trống.`;
+    return;
+  }
+
+  const maxRad = Math.max(...chosenEls.map(e => e.rad), 200);
+  stage.innerHTML = chosenEls.map(e => {
+    const sizePx = Math.max(28, Math.round((e.rad / maxRad) * 135));
+    const color = typeColors[e.type] || "#38bdf8";
+    return `
+      <div class="atom-item">
+        <div class="atom-sphere-wrap">
+          <div class="atom-sphere" style="width:${sizePx}px; height:${sizePx}px; background: radial-gradient(circle at 32% 32%, ${color}, #0f172a 85%);">
+            <div class="atom-nucleus"></div>
+            <span class="atom-label-sym">${e.sym}</span>
+          </div>
+        </div>
+        <div class="atom-meta">${e.name.split(' ')[0]} (Z=${e.z})</div>
+        <div class="atom-sub">Bán kính: <strong style="color:#38bdf8;">${e.rad} pm</strong></div>
+        <div class="atom-sub">Chu kỳ ${e.p} (${e.p} lớp e) | Nhóm ${shortGroup[e.col]}</div>
+      </div>
+    `;
+  }).join("");
+
+  const sortedDesc = [...chosenEls].sort((a, b) => b.rad - a.rad);
+  const sortedAsc = [...chosenEls].sort((a, b) => a.rad - b.rad);
+
+  const descStr = sortedDesc.map(e => `<strong>${e.sym}</strong> (${e.rad} pm)`).join(" &gt; ");
+  const ascStr = sortedAsc.map(e => `<strong>${e.sym}</strong> (${e.rad} pm)`).join(" &lt; ");
+
+  const allSamePeriod = chosenEls.every(e => e.p === chosenEls[0].p);
+  const allSameGroup = chosenEls.every(e => e.col === chosenEls[0].col);
+
+  let ruleExplain = "";
+  if (allSamePeriod) {
+    ruleExplain = `💡 <strong>Giải thích theo quy luật Chu kỳ (Chu kỳ ${chosenEls[0].p}):</strong> Các nguyên tố này đều có cùng <strong>${chosenEls[0].p} lớp electron</strong>. Khi đi từ trái sang phải, điện tích hạt nhân (Z) tăng dần làm lực hút giữa hạt nhân với các electron lớp ngoài cùng mạnh lên, kéo lớp vỏ lại gần hơn ➔ <strong>bán kính nguyên tử giảm dần</strong>.`;
+  } else if (allSameGroup) {
+    ruleExplain = `💡 <strong>Giải thích theo quy luật Nhóm (Nhóm ${shortGroup[chosenEls[0].col]}):</strong> Các nguyên tố này thuộc cùng một cột nhóm. Khi đi từ trên xuống dưới theo chiều tăng của điện tích hạt nhân, <strong>số lớp electron tăng dần</strong> (từ ${sortedAsc[0].p} lớp lên ${sortedDesc[0].p} lớp) ➔ <strong>bán kính nguyên tử tăng dần</strong>.`;
+  } else {
+    ruleExplain = `💡 <strong>Nhận xét Hóa học 10:</strong> Nguyên tố <strong>${sortedDesc[0].sym}</strong> (Chu kỳ ${sortedDesc[0].p}, Nhóm ${shortGroup[sortedDesc[0].col]}) có bán kính lớn nhất (${sortedDesc[0].rad} pm) do có nhiều lớp electron và nằm lệch về phía bên trái bảng tuần hoàn; ngược lại <strong>${sortedAsc[0].sym}</strong> (Chu kỳ ${sortedAsc[0].p}, Nhóm ${shortGroup[sortedAsc[0].col]}) có bán kính nhỏ nhất (${sortedAsc[0].rad} pm).`;
+  }
+
+  conclusion.innerHTML = `
+    <div>📌 <strong>Thứ tự bán kính giảm dần:</strong> ${descStr}</div>
+    <div style="margin-top:4px;">📌 <strong>Thứ tự bán kính tăng dần:</strong> ${ascStr}</div>
+    <div style="margin-top:8px; color:#cbd5e1;">${ruleExplain}</div>
+  `;
+}
+
+initDropSlots();
+renderPalette();
+renderSlotsAndComparison();
+
+window.addEventListener("DOMContentLoaded", () => {
+  const params = new URLSearchParams(window.location.search);
+  const key = (params.get("el") || window.location.hash.replace("#", "")).trim().toLowerCase();
+  if (key) {
+    const found = elements.find(e => e.sym.toLowerCase() === key || String(e.z) === key);
+    if (found) openM(found);
+  }
+});
+
+// Nút tạo QR in ấn
+const qrBtn = document.createElement("button");
+qrBtn.className = "filter-btn b-qr";
+qrBtn.textContent = "🖨️ Tạo QR Từng Nguyên Tố";
+qrBtn.onclick = () => {
+  const base = window.location.href.split('?')[0].split('#')[0];
+  const win = window.open("", "_blank");
+  const list = elements.filter(e => e.z <= 20);
+  win.document.write(`
+    <html><head><title>In Mã QR Từng Nguyên Tố</title>
+    <style>
+      body { font-family: sans-serif; padding: 20px; text-align: center; }
+      .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; max-width: 800px; margin: 20px auto; }
+      .item { border: 1px dashed #333; padding: 8px; border-radius: 6px; page-break-inside: avoid; }
+      .item img { width: 90px; height: 90px; }
+      .label { font-weight: bold; margin-top: 4px; font-size: 12px; }
+      @media print { button { display: none; } }
+    
+    /* Thanh chia 2 Mục chính (Main Tabs) */
+    .main-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .main-tab-btn {
+      padding: 12px 22px;
+      border-radius: 12px;
+      border: 2px solid #334155;
+      background: #1e293b;
+      color: #cbd5e1;
+      font-size: 0.92rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .main-tab-btn:hover {
+      border-color: var(--accent);
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+    .main-tab-btn.active {
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      border-color: #38bdf8;
+      color: #fff;
+      box-shadow: 0 0 18px rgba(56, 189, 248, 0.45);
+    }
+
+    .tab-section {
+      display: none;
+      animation: fadeIn 0.25s ease-in-out;
+    }
+
+    .tab-section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Giao diện Mục 2: Hướng dẫn làm Bảng Tuần Hoàn Vật Lý */
+    .diy-container {
+      max-width: 1020px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .diy-card {
+      background: linear-gradient(145deg, #1e293b, #0f172a);
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+    }
+
+    .diy-card h2 {
+      color: #38bdf8;
+      font-size: 1.2rem;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid #334155;
+      padding-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .diy-grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+    }
+
+    .step-card {
+      background: #0b1120;
+      border: 1px solid #334155;
+      border-left: 4px solid #38bdf8;
+      border-radius: 12px;
+      padding: 14px;
+      transition: 0.2s;
+    }
+
+    .step-card:hover {
+      border-color: #facc15;
+      transform: translateY(-2px);
+    }
+
+    .step-badge {
+      display: inline-block;
+      background: #38bdf8;
+      color: #000;
+      font-weight: 800;
+      font-size: 0.75rem;
+      padding: 2px 9px;
+      border-radius: 12px;
+      margin-bottom: 6px;
+    }
+
+    .step-card h3 {
+      font-size: 1rem;
+      color: #f8fafc;
+      margin-bottom: 6px;
+    }
+
+    .step-card ul {
+      padding-left: 18px;
+      font-size: 0.86rem;
+      color: #cbd5e1;
+    }
+
+    .step-card li {
+      margin-bottom: 5px;
+    }
+
+    .blueprint-box {
+      background: #071324;
+      border: 2px dashed #38bdf8;
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .flip-demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .flip-layer {
+      background: #1e293b;
+      border: 1.5px solid #475569;
+      border-radius: 10px;
+      padding: 12px;
+      text-align: left;
+    }
+
+    .flip-layer strong {
+      color: #facc15;
+      display: block;
+      margin-bottom: 4px;
+      font-size: 0.9rem;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #0b1120;
+      padding: 10px 12px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      font-size: 0.88rem;
+      border: 1px solid #1e293b;
+    }
+
+    .check-item input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: #10b981;
+      cursor: pointer;
+    }
+
+    .sample-table-wrap {
+      overflow-x: auto;
+      margin-top: 10px;
+    }
+
+    .sample-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.83rem;
+      min-width: 650px;
+    }
+
+    .sample-table th, .sample-table td {
+      border: 1px solid #334155;
+      padding: 8px 10px;
+      text-align: left;
+    }
+
+    .sample-table th {
+      background: #0f172a;
+      color: #38bdf8;
+      font-weight: 700;
+    }
+
+    .sample-table tr:nth-child(even) {
+      background: rgba(15, 23, 42, 0.55);
+    }
+
+  
+    /* Bàn Thí Nghiệm Ghép Cặp Phản Ứng */
+    .lab-section {
+      max-width: 980px;
+      margin: 22px auto;
+      background: linear-gradient(145deg, #1e293b, #0f172a);
+      border: 1.5px solid #10b981;
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.45);
+    }
+    .lab-header { text-align: center; margin-bottom: 14px; }
+    .lab-header h2 { color: #10b981; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 0.5px; }
+    .lab-header p { color: #cbd5e1; font-size: 0.84rem; margin-top: 4px; }
+    .lab-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 16px; }
+    .lab-chip {
+      padding: 6px 12px; border-radius: 8px; background: #0f172a; border: 1.5px solid #10b981;
+      color: #fff; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: 0.2s;
+    }
+    .lab-chip:hover { background: #10b981; color: #000; transform: translateY(-2px); }
+    .lab-bench {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 14px;
+      background: rgba(11, 17, 32, 0.8); border: 1px dashed #334155; border-radius: 12px; padding: 18px;
+    }
+    .lab-slot {
+      width: 115px; height: 85px; border: 2px dashed #475569; border-radius: 12px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      background: #0f172a; cursor: pointer; transition: 0.2s;
+    }
+    .lab-slot.active-el { border-style: solid; border-color: #10b981; background: rgba(16, 185, 129, 0.12); }
+    .lab-plus { font-size: 1.6rem; font-weight: 800; color: #facc15; }
+    .lab-result {
+      min-width: 240px; flex: 1; background: #0f172a; border: 1.5px solid #38bdf8;
+      border-radius: 12px; padding: 14px; text-align: left;
+    }
+    .lab-eq { font-family: monospace; font-size: 0.95rem; color: #facc15; background: #1e293b; padding: 4px 8px; border-radius: 6px; display: inline-block; margin: 6px 0; }
+
+  </style></head><body>
+    <button onclick="window.print()" style="padding:10px 20px; font-size:16px; cursor:pointer; background:#2563eb; color:#fff; border:none; border-radius:8px;">🖨️ Bấm vào đây để In hoặc Lưu thành PDF</button>
+    <div class="grid">
+      ${list.map(e => {
+        const url = encodeURIComponent(base + "?el=" + e.sym);
+        return `<div class="item">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${url}" />
+          <div class="label">Z=${e.z} - ${e.sym} (${e.name.split(' ')[0]})</div>
+        </div>`;
+      }).join('')}
+    </div></body></html>
+  `);
+};
+document.querySelector(".controls").appendChild(qrBtn);
+
+// Mini-Quiz
+function nextQuiz() {
+  const pool = elements.filter(e => e.z <= 20);
+  const ans = pool[Math.floor(Math.random() * pool.length)];
+  document.getElementById("q-text").innerHTML = `Nguyên tố nào có <strong>Z = ${ans.z}</strong> (Chu kỳ ${ans.p}, Nhóm ${ans.g}, Bán kính ${ans.rad} pm)?`;
+  document.getElementById("q-res").textContent = "";
+  let opts = [ans];
+  while (opts.length < 4) {
+    let r = pool[Math.floor(Math.random() * pool.length)];
+    if (!opts.includes(r)) opts.push(r);
+  }
+  opts.sort(() => Math.random() - 0.5);
+  const box = document.getElementById("q-opts");
+  box.innerHTML = "";
+  opts.forEach(o => {
+    const b = document.createElement("button");
+    b.className = "q-btn";
+    b.textContent = `${o.sym} - ${o.name}`;
+    b.onclick = () => {
+      const res = document.getElementById("q-res");
+      if (o.z === ans.z) {
+        res.style.color = "#4ade80";
+        res.textContent = "🎉 Chính xác! Tuyệt vời!";
+        setTimeout(nextQuiz, 1200);
+      } else {
+        res.style.color = "#f87171";
+        res.textContent = "❌ Chưa đúng, thử lại nhé!";
+      }
+    };
+    box.appendChild(b);
+  });
+}
+nextQuiz();
+
+const diySamples = {
+  1: "Hình giọt nước nhỏ / Bóng bay mini (H₂O)",
+  2: "Vỏ quả bóng bay nhỏ (Khí bơm bóng bay)",
+  3: "Hình viên pin điện thoại / Pin cúc áo nhỏ",
+  4: "Mẩu lò xo nhỏ / Hình vệ tinh hàng không",
+  5: "Mẩu thủy tinh chịu nhiệt / Thuốc nhỏ mắt",
+  6: "Mẩu ruột bút chì bấm (Than chì nguyên chất)",
+  7: "Mẩu vỏ gói bim bim/snack (Khí N₂ bảo quản)",
+  8: "Hình chiếc lá xanh / Bình oxy y tế",
+  9: "Mẩu vỏ tuýp kem đánh răng (Chứa Fluoride)",
+  10: "Bóng đèn LED nhỏ trong suốt (Đèn Neon)",
+  11: "Vài hạt muối ăn (NaCl) đựng trong túi nilon nhỏ",
+  12: "Mẩu que pháo sáng / Hình chiếc lá (Diệp lục)",
+  13: "Mẩu giấy bạc nướng thức ăn / Mảnh vỏ lon nước ngọt",
+  14: "Linh kiện điện tử/con chip cũ nhỏ hoặc vài hạt cát sạch",
+  15: "Mẩu giấy nhám đỏ ở cạnh vỏ bao diêm (Photpho đỏ)",
+  16: "Mẩu bột lưu huỳnh vàng hoặc mẩu cao su lốp xe",
+  17: "Hạt muối ăn / Nhãn chai nước tẩy Javel",
+  18: "Bóng đèn sợi đốt mini (Khí Argon bảo vệ dây tóc)",
+  19: "Vài hạt phân bón Kali hoặc hình quả chuối",
+  20: "Mẩu phấn viết bảng hoặc mảnh vỏ trứng sạch (CaCO₃)"
+};
+
+function switchMainTab(tabIndex) {
+  document.getElementById("tabBtn1").classList.toggle("active", tabIndex === 1);
+  document.getElementById("tabBtn2").classList.toggle("active", tabIndex === 2);
+  document.getElementById("mainTab1").classList.toggle("active", tabIndex === 1);
+  document.getElementById("mainTab2").classList.toggle("active", tabIndex === 2);
+}
+
+function renderDiyTable() {
+  const tbody = document.getElementById("diySampleTableBody");
+  if (!tbody) return;
+  const first20 = elements.filter(e => e.z <= 20);
+  tbody.innerHTML = first20.map(e => `
+    <tr>
+      <td><strong>${e.z}</strong></td>
+      <td><strong style="color:#38bdf8;font-size:0.95rem;">${e.sym}</strong> (${e.name.split(' ')[0]})</td>
+      <td>CK ${e.p} — Nhóm ${shortGroup[e.col]}</td>
+      <td>${e.cfg} <span style="color:#facc15;">(${e.shells.join('-')})</span></td>
+      <td>${e.rad} pm</td>
+      <td>${diySamples[e.z] || e.app}</td>
+    </tr>
+  `).join("");
+}
+renderDiyTable();
+
+const labElements = ["H", "C", "N", "O", "Na", "Mg", "Al", "S", "Cl", "Ca", "Fe", "Cu"];
+const reactionsDB = {
+  "Cl+Na": { formula: "NaCl", name: "Sodium Chloride (Muối ăn)", eq: "2Na + Cl₂ → 2NaCl", effect: "🔥 Cháy sáng vàng rực, tạo tinh thể muối trắng.", app: "Gia vị thiết yếu hàng ngày, nước muối sinh lý, bảo quản thực phẩm." },
+  "H+O": { formula: "H₂O", name: "Nước (Water)", eq: "2H₂ + O₂ → 2H₂O", effect: "💥 Nổ nhẹ kèm ngọn lửa xanh nhạt, ngưng tụ giọt nước.", app: "Duy trì sự sống, dung môi phổ biến nhất trên Trái Đất." },
+  "Mg+O": { formula: "MgO", name: "Magnesium Oxide", eq: "2Mg + O₂ → 2MgO", effect: "✨ Phát ánh sáng trắng chói lòa, tạo bột trắng mịn.", app: "Làm pháo sáng, vật liệu chịu lửa, thuốc giảm đau dạ dày." },
+  "Fe+S": { formula: "FeS", name: "Iron(II) Sulfide", eq: "Fe + S → FeS", effect: "🌡️ Hỗn hợp nóng đỏ rực, tạo chất rắn màu đen xám.", app: "Điều chế khí H₂S trong phòng thí nghiệm hóa học." },
+  "C+O": { formula: "CO₂", name: "Carbon Dioxide", eq: "C + O₂ → CO₂", effect: "🔥 Than cháy đỏ hồng tỏa nhiều nhiệt.", app: "Khí tạo ga trong nước ngọt, bình chữa cháy, quang hợp của cây." },
+  "Al+O": { formula: "Al₂O₃", name: "Aluminium Oxide", eq: "4Al + 3O₂ → 2Al₂O₃", effect: "🛡️ Tạo lớp màng oxit siêu bền bảo vệ nhôm không bị gỉ.", app: "Thành phần chính của đá quý Ruby, Sapphire, giấy nhám." },
+  "Ca+O": { formula: "CaO", name: "Calcium Oxide (Vôi sống)", eq: "2Ca + O₂ → 2CaO", effect: "🔥 Cháy sáng đỏ cam, tạo chất rắn màu trắng.", app: "Sản xuất vôi tôi quét tường, khử chua đất trồng trọt." },
+  "Cu+Cl": { formula: "CuCl₂", name: "Copper(II) Chloride", eq: "Cu + Cl₂ → CuCl₂", effect: "💚 Dây đồng cháy trong khí Clo tạo khói nâu, hòa tan ra dung dịch xanh lam.", app: "Chất xúc tác công nghiệp, tạo màu xanh trong pháo hoa." },
+  "H+N": { formula: "NH₃", name: "Ammonia (Amoniac)", eq: "N₂ + 3H₂ ⇌ 2NH₃", effect: "💨 Tạo khí không màu có mùi khai đặc trưng.", app: "Nguyên liệu cốt lõi sản xuất phân đạm urê, chất làm lạnh." },
+  "H+Cl": { formula: "HCl", name: "Hydrogen Chloride / Axit HCl", eq: "H₂ + Cl₂ → 2HCl", effect: "⚡ Phản ứng mãnh liệt dưới ánh sáng, tạo khí tan mạnh trong nước.", app: "Axit có trong dịch vị dạ dày giúp tiêu hóa thức ăn, tẩy gỉ thép." },
+  "Fe+O": { formula: "Fe₃O₄", name: "Oxide sắt từ", eq: "3Fe + 2O₂ → Fe₃O₄", effect: "🎇 Bắn ra các tia sáng lấp lánh như pháo hoa.", app: "Quặng magnetit sản xuất gang thép, vật liệu từ tính." },
+  "S+O": { formula: "SO₂", name: "Sulfur Dioxide", eq: "S + O₂ → SO₂", effect: "💙 Lưu huỳnh cháy với ngọn lửa xanh lam mờ ảo.", app: "Sản xuất axit sunfuric (H₂SO₄), chất tẩy trắng bột giấy." }
+};
+
+let labPick1 = null, labPick2 = null;
+
+function initLab() {
+  const chipsBox = document.getElementById("labChips");
+  if (!chipsBox) return;
+  chipsBox.innerHTML = labElements.map(sym => `<button class="lab-chip" onclick="pickLabEl('${sym}')">${sym}</button>`).join("");
+}
+
+function pickLabEl(sym) {
+  if (!labPick1) labPick1 = sym;
+  else if (!labPick2 && sym !== labPick1) labPick2 = sym;
+  else { labPick1 = sym; labPick2 = null; }
+  updateLabUI();
+}
+
+function clearLabSlot(num) {
+  if (num === 1) labPick1 = null;
+  if (num === 2) labPick2 = null;
+  updateLabUI();
+}
+
+function updateLabUI() {
+  const s1 = document.getElementById("labSlot1");
+  const s2 = document.getElementById("labSlot2");
+  const res = document.getElementById("labResult");
+
+  s1.className = labPick1 ? "lab-slot active-el" : "lab-slot";
+  s1.innerHTML = labPick1 ? `<strong style="font-size:1.4rem;color:#10b981;">${labPick1}</strong><span style="font-size:0.7rem;color:#94a3b8;">(Bấm để bỏ)</span>` : `<span style="color:#64748b;font-size:0.8rem;">Chất tham gia 1</span>`;
+
+  s2.className = labPick2 ? "lab-slot active-el" : "lab-slot";
+  s2.innerHTML = labPick2 ? `<strong style="font-size:1.4rem;color:#10b981;">${labPick2}</strong><span style="font-size:0.7rem;color:#94a3b8;">(Bấm để bỏ)</span>` : `<span style="color:#64748b;font-size:0.8rem;">Chất tham gia 2</span>`;
+
+  if (!labPick1 || !labPick2) {
+    res.innerHTML = `<div style="color:#94a3b8;font-size:0.85rem;">Hãy chọn đủ <strong>2 nguyên tố</strong> để xem phản ứng hóa học xảy ra!</div>`;
+    return;
+  }
+
+  const key = [labPick1, labPick2].sort().join("+");
+  const rx = reactionsDB[key];
+  if (rx) {
+    res.innerHTML = `
+      <div style="font-size:1.05rem;font-weight:800;color:#38bdf8;">✨ Sản phẩm: ${rx.formula} — ${rx.name}</div>
+      <div class="lab-eq">${rx.eq}</div>
+      <div style="font-size:0.84rem;color:#e2e8f0;margin-top:4px;"><strong>Hiện tượng:</strong> ${rx.effect}</div>
+      <div style="font-size:0.84rem;color:#cbd5e1;margin-top:4px;"><strong>Ứng dụng thực tế:</strong> ${rx.app}</div>
+    `;
+  } else {
+    res.innerHTML = `
+      <div style="font-size:0.95rem;font-weight:700;color:#facc15;">⚠️ Chưa có phản ứng trực tiếp phổ biến giữa ${labPick1} và ${labPick2}</div>
+      <div style="font-size:0.82rem;color:#cbd5e1;margin-top:4px;">Gợi ý thử các cặp kinh điển: <strong>Na + Cl</strong>, <strong>H + O</strong>, <strong>Mg + O</strong>, <strong>Fe + S</strong>, <strong>C + O</strong>, <strong>Ca + O</strong>, <strong>H + N</strong>.</div>
+    `;
+  }
+}
+initLab();
+
+// Đồng bộ hiển thị điểm XP từ Web em sinh đôi (ChemLingo) qua localStorage chung
+(function syncTwinXP() {
+  try {
+    const saved = JSON.parse(localStorage.getItem("chemlingo_stem10_v1"));
+    const badge = document.getElementById("twinXpBadge");
+    if (saved && badge && saved.xp > 0) {
+      badge.textContent = `⚡ ${saved.xp} XP • 🔥 ${saved.streak || 0} ↗`;
+    }
+  } catch (e) {}
+})();
+
+
+
+</script>
+</body>
+</html>

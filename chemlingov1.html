@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChemLingo - Học Hóa Học 10 Kiểu Duolingo (STEM Bài 5)</title>
+  <style>
+    :root {
+      --bg: #0b1120;
+      --card: #1e293b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #38bdf8;
+      --duo-green: #58cc02;
+      --duo-green-dark: #3f9600;
+      --duo-gold: #ffc800;
+      --duo-red: #ff4b4b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      padding: 12px;
+      line-height: 1.5;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    header {
+      text-align: center;
+      padding: 16px;
+      background: linear-gradient(135deg, #132a13, #0f172a);
+      border-radius: 14px;
+      border: 1.5px solid #2b8a00;
+      margin: 0 auto 14px;
+      max-width: 820px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.45);
+    }
+
+    header h1 {
+      font-size: 1.4rem;
+      color: #89e219;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    header p {
+      font-size: 0.85rem;
+      color: #cbd5e1;
+      margin-top: 4px;
+    }
+
+    /* Thanh chuyển đổi Anh Em Sinh Đôi */
+    .twin-nav {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin: 0 auto 18px;
+      max-width: 820px;
+      flex-wrap: wrap;
+    }
+
+    .twin-btn {
+      padding: 11px 20px;
+      border-radius: 12px;
+      border: 2px solid #334155;
+      background: #1e293b;
+      color: #cbd5e1;
+      font-size: 0.9rem;
+      font-weight: 800;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.22s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .twin-btn.active-app {
+      background: linear-gradient(135deg, #58cc02, #2b8a00);
+      border-color: #89e219;
+      color: #fff;
+      box-shadow: 0 0 18px rgba(88, 204, 2, 0.45);
+    }
+
+    .twin-btn.sibling-link {
+      border-color: #38bdf8;
+      background: linear-gradient(135deg, rgba(56,189,248,0.16), rgba(37,99,235,0.28));
+      color: #7dd3fc;
+    }
+
+    .twin-btn.sibling-link:hover {
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 0 18px rgba(56, 189, 248, 0.45);
+    }
+
+    .twin-pill {
+      background: #38bdf8;
+      color: #082f49;
+      font-size: 0.68rem;
+      font-weight: 900;
+      padding: 2px 7px;
+      border-radius: 99px;
+    }
+
+    /* Container chính của ChemLingo */
+    .cl-wrap {
+      max-width: 780px;
+      margin: 0 auto;
+    }
+
+    .cl-hud {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      background: #1e293b;
+      border: 2px solid #334155;
+      border-radius: 16px;
+      padding: 12px 16px;
+      margin-bottom: 18px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+    }
+
+    .cl-stats {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .cl-stat-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 0.96rem;
+      background: #0f172a;
+      padding: 6px 12px;
+      border-radius: 12px;
+      border: 1.5px solid #334155;
+    }
+
+    .cl-stat-streak { color: #ff9600; border-color: rgba(255,150,0,0.4); }
+    .cl-stat-xp { color: #ffc800; border-color: rgba(255,200,0,0.4); }
+    .cl-stat-hearts { color: #ff4b4b; border-color: rgba(255,75,75,0.4); }
+
+    .cl-hud-actions {
+      display: flex;
+      gap: 7px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .cl-mini-btn {
+      padding: 6px 10px;
+      border-radius: 10px;
+      border: 1.5px solid #475569;
+      background: #0f172a;
+      color: #cbd5e1;
+      font-size: 0.76rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .cl-mini-btn:hover { border-color: #58cc02; color: #fff; }
+    .cl-mini-btn.on { border-color: #58cc02; color: #58cc02; background: rgba(88,204,2,0.12); }
+    .cl-mini-btn.qr-btn { border-color: #ec4899; color: #f472b6; }
+    .cl-mini-btn.qr-btn:hover { background: #ec4899; color: #fff; }
+
+    /* Bản đồ lộ trình Zic-Zắc */
+    .cl-path-banner {
+      background: linear-gradient(135deg, #58cc02, #2b8a00);
+      border-radius: 16px;
+      padding: 16px 20px;
+      color: #fff;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 5px 0 #236e00;
+    }
+    .cl-path-banner h2 { font-size: 1.12rem; margin-bottom: 3px; }
+    .cl-path-banner p { font-size: 0.84rem; opacity: 0.95; }
+
+    .cl-path-list {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 26px;
+      padding: 12px 0 32px;
+    }
+
+    .cl-node-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+      max-width: 500px;
+      justify-content: center;
+      transition: transform 0.2s;
+    }
+    .cl-node-row.offset-left { transform: translateX(-32px); }
+    .cl-node-row.offset-right { transform: translateX(32px); }
+    @media (max-width: 540px) {
+      .cl-node-row.offset-left { transform: translateX(-14px); }
+      .cl-node-row.offset-right { transform: translateX(14px); }
+    }
+
+    .cl-node-btn {
+      width: 82px;
+      height: 82px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      font-size: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: transform 0.12s, box-shadow 0.12s;
+      flex-shrink: 0;
+    }
+
+    .cl-node-btn.unlocked {
+      background: #58cc02;
+      color: #fff;
+      box-shadow: 0 7px 0 #3f9600, 0 0 20px rgba(88,204,2,0.35);
+    }
+    .cl-node-btn.unlocked:active { transform: translateY(5px); box-shadow: 0 2px 0 #3f9600; }
+
+    .cl-node-btn.completed {
+      background: #ffc800;
+      color: #000;
+      box-shadow: 0 7px 0 #cc9e00, 0 0 18px rgba(255,200,0,0.35);
+    }
+    .cl-node-btn.completed:active { transform: translateY(5px); box-shadow: 0 2px 0 #cc9e00; }
+
+    .cl-node-btn.locked {
+      background: #334155;
+      color: #64748b;
+      box-shadow: 0 7px 0 #1e293b;
+      cursor: not-allowed;
+    }
+
+    .cl-node-badge {
+      position: absolute;
+      top: -10px;
+      background: #1e293b;
+      color: #58cc02;
+      border: 2px solid #58cc02;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 10px;
+      white-space: nowrap;
+      animation: clBounce 1.6s infinite;
+    }
+    @keyframes clBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+
+    .cl-node-info {
+      background: #1e293b;
+      border: 1.5px solid #334155;
+      border-radius: 14px;
+      padding: 11px 14px;
+      flex: 1;
+      text-align: left;
+    }
+    .cl-node-info h3 { font-size: 0.96rem; color: #f8fafc; margin-bottom: 2px; }
+    .cl-node-info p { font-size: 0.78rem; color: #94a3b8; }
+    .cl-node-meta { font-size: 0.72rem; font-weight: 700; color: #ffc800; margin-top: 4px; }
+
+    /* Giao diện Làm Bài (Lesson Arena) */
+    .cl-arena {
+      display: none;
+      background: #131c31;
+      border: 2px solid #334155;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .cl-arena.active { display: block; }
+
+    .cl-lesson-top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .cl-quit-btn {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      font-size: 1.5rem;
+      font-weight: 700;
+      cursor: pointer;
+      line-height: 1;
+    }
+    .cl-quit-btn:hover { color: #fff; }
+
+    .cl-prog-track {
+      flex: 1;
+      height: 14px;
+      background: #1e293b;
+      border-radius: 99px;
+      overflow: hidden;
+      border: 1px solid #334155;
+    }
+    .cl-prog-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #58cc02, #89e219);
+      border-radius: 99px;
+      transition: width 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .cl-mascot-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .cl-mascot-icon {
+      font-size: 2.8rem;
+      background: #1e293b;
+      border: 2px solid #38bdf8;
+      border-radius: 50%;
+      width: 64px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .cl-speech {
+      background: #1e293b;
+      border: 1.5px solid #475569;
+      border-radius: 14px;
+      padding: 12px 15px;
+      flex: 1;
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: #f8fafc;
+    }
+    .cl-q-type-tag {
+      display: inline-block;
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #38bdf8;
+      margin-bottom: 4px;
+      font-weight: 800;
+    }
+
+    /* Dạng 1: Trắc nghiệm */
+    .cl-mcq-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .cl-opt-card {
+      background: #1e293b;
+      border: 2px solid #334155;
+      border-bottom: 5px solid #334155;
+      border-radius: 14px;
+      padding: 14px 16px;
+      color: #f8fafc;
+      font-size: 0.94rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: left;
+      transition: 0.12s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .cl-opt-card:hover:not(:disabled) { background: #26354d; border-color: #475569; }
+    .cl-opt-card.selected { background: rgba(56,189,248,0.16); border-color: #38bdf8; border-bottom-color: #0284c7; color: #7dd3fc; }
+    .cl-opt-card.correct { background: rgba(88,204,2,0.18); border-color: #58cc02; border-bottom-color: #3f9600; color: #a3e635; }
+    .cl-opt-card.wrong { background: rgba(255,75,75,0.18); border-color: #ff4b4b; border-bottom-color: #b91c1c; color: #fca5a5; }
+    .cl-opt-key {
+      width: 26px; height: 26px; border-radius: 8px;
+      border: 1.5px solid #475569;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.78rem; color: #94a3b8; flex-shrink: 0;
+    }
+
+    /* Dạng 2: Xếp gạch Cấu hình e */
+    .cl-tile-answer {
+      min-height: 62px;
+      background: #0b1120;
+      border: 2px dashed #475569;
+      border-radius: 14px;
+      padding: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .cl-tile-bank {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 18px;
+    }
+    .cl-tile {
+      padding: 9px 15px;
+      background: #1e293b;
+      border: 2px solid #475569;
+      border-bottom: 4px solid #334155;
+      border-radius: 12px;
+      color: #fff;
+      font-weight: 800;
+      font-size: 0.96rem;
+      cursor: pointer;
+      transition: 0.12s;
+    }
+    .cl-tile:hover:not(:disabled) { border-color: #38bdf8; transform: translateY(-2px); }
+    .cl-tile.used { opacity: 0.22; pointer-events: none; }
+
+    /* Dạng 3: So sánh VS */
+    .cl-vs-grid {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+    .cl-vs-card {
+      background: #1e293b;
+      border: 2px solid #334155;
+      border-bottom: 5px solid #334155;
+      border-radius: 16px;
+      padding: 18px 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.15s;
+      color: #fff;
+    }
+    .cl-vs-card:hover:not(:disabled) { border-color: #38bdf8; transform: translateY(-2px); }
+    .cl-vs-card.selected { border-color: #38bdf8; background: rgba(56,189,248,0.16); border-bottom-color: #0284c7; }
+    .cl-vs-card.correct { border-color: #58cc02; background: rgba(88,204,2,0.18); border-bottom-color: #3f9600; }
+    .cl-vs-card.wrong { border-color: #ff4b4b; background: rgba(255,75,75,0.18); border-bottom-color: #b91c1c; }
+    .cl-vs-sym { font-size: 2rem; font-weight: 900; color: #38bdf8; }
+    .cl-vs-sub { font-size: 0.8rem; color: #cbd5e1; margin-top: 4px; }
+    .cl-vs-badge { font-size: 1.1rem; font-weight: 900; color: #ffc800; }
+
+    /* Dạng 4: Ghép cặp */
+    .cl-match-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .cl-match-col { display: flex; flex-direction: column; gap: 10px; }
+    .cl-match-btn {
+      padding: 12px;
+      background: #1e293b;
+      border: 2px solid #334155;
+      border-bottom: 4px solid #334155;
+      border-radius: 12px;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: 0.15s;
+      min-height: 52px;
+    }
+    .cl-match-btn.selected { border-color: #38bdf8; background: rgba(56,189,248,0.18); color: #7dd3fc; }
+    .cl-match-btn.matched { opacity: 0.28; border-color: #58cc02; pointer-events: none; text-decoration: line-through; }
+    .cl-match-btn.shake { border-color: #ff4b4b; background: rgba(255,75,75,0.22); }
+
+    /* Nút kiểm tra & Phản hồi */
+    .cl-action-bar {
+      display: flex;
+      justify-content: flex-end;
+      padding-top: 10px;
+      border-top: 1px solid #334155;
+    }
+    .cl-check-btn {
+      padding: 12px 26px;
+      border-radius: 14px;
+      border: none;
+      background: #58cc02;
+      color: #fff;
+      font-weight: 800;
+      font-size: 0.94rem;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      box-shadow: 0 5px 0 #3f9600;
+      transition: 0.12s;
+      text-transform: uppercase;
+    }
+    .cl-check-btn:disabled {
+      background: #334155;
+      color: #64748b;
+      box-shadow: 0 5px 0 #1e293b;
+      cursor: not-allowed;
+    }
+    .cl-check-btn:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 2px 0 #3f9600; }
+
+    .cl-feedback {
+      display: none;
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .cl-feedback.show { display: flex; }
+    .cl-feedback.ok { background: rgba(88,204,2,0.16); border: 2px solid #58cc02; }
+    .cl-feedback.err { background: rgba(255,75,75,0.16); border: 2px solid #ff4b4b; }
+    .cl-fb-title { font-weight: 800; font-size: 1rem; margin-bottom: 3px; }
+    .cl-fb-desc { font-size: 0.84rem; color: #e2e8f0; }
+
+    /* Liên kết sâu sang Mô hình 3D ở Web anh sinh đôi */
+    .twin-3d-jump {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 5px 11px;
+      border-radius: 8px;
+      background: rgba(56, 189, 248, 0.18);
+      border: 1px solid #38bdf8;
+      color: #7dd3fc;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .twin-3d-jump:hover { background: #38bdf8; color: #082f49; }
+
+    /* Màn hình Tổng kết */
+    .cl-summary {
+      display: none;
+      text-align: center;
+      background: linear-gradient(145deg, #1e293b, #0f172a);
+      border: 2px solid #ffc800;
+      border-radius: 20px;
+      padding: 28px 20px;
+    }
+    .cl-summary.active { display: block; }
+    .cl-sum-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      max-width: 440px;
+      margin: 18px auto;
+    }
+    .cl-sum-box {
+      background: #0b1120;
+      border: 1.5px solid #334155;
+      border-radius: 14px;
+      padding: 12px 8px;
+    }
+    .cl-sum-val { font-size: 1.4rem; font-weight: 900; color: #ffc800; }
+    .cl-sum-lbl { font-size: 0.72rem; color: #94a3b8; margin-top: 2px; }
+
+    footer {
+      text-align: center;
+      margin-top: 26px;
+      font-size: 0.78rem;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🦉 CHEMLINGO — HỌC HÓA HỌC 10 KIỂU DUOLINGO</h1>
+  <p>Ứng dụng luyện tập tương tác sinh đôi cùng Bảng Tuần Hoàn 118 Nguyên Tố 3D (Dự án STEM Bài 5)</p>
+</header>
+
+<!-- THANH CHUYỂN ĐỔI ANH EM SINH ĐÔI -->
+<nav class="twin-nav">
+  <a href="index.html" class="twin-btn sibling-link">
+    🌐 MỞ BẢNG TUẦN HOÀN SỐ 3D <span class="twin-pill">WEB ANH EM ↗</span>
+  </a>
+  <span class="twin-btn active-app">
+    🦉 CHEMLINGO (ĐANG Ở ĐÂY)
+  </span>
+</nav>
+
+<div class="cl-wrap">
+  <!-- Thanh trạng thái HUD -->
+  <div class="cl-hud">
+    <div class="cl-stats">
+      <div class="cl-stat-pill cl-stat-streak" title="Chuỗi trả lời đúng">🔥 <span id="clStreak">0</span></div>
+      <div class="cl-stat-pill cl-stat-xp" title="Điểm kinh nghiệm XP">⚡ <span id="clXP">0</span> XP</div>
+      <div class="cl-stat-pill cl-stat-hearts" title="Tim (Mạng sống)">❤️ <span id="clHearts">5</span></div>
+    </div>
+    <div class="cl-hud-actions">
+      <button class="cl-mini-btn on" id="clSoundBtn" onclick="clToggleSound()">🔊 Âm thanh: Bật</button>
+      <button class="cl-mini-btn" id="clDemoBtn" onclick="clToggleUnlockAll()" title="Bật để mở tự do cả 4 chặng khi thuyết trình trước lớp">🎓 Mở hết (Thuyết trình)</button>
+      <button class="cl-mini-btn" onclick="clRefillHearts()" title="Hồi đầy 5 tim">❤️ Hồi tim</button>
+      <button class="cl-mini-btn qr-btn" onclick="clPrintQR()" title="In mã QR riêng của ChemLingo dán lên bảng carton">🖨️ Mã QR</button>
+    </div>
+  </div>
+
+  <!-- Màn hình 1: Bản đồ lộ trình Zic-Zắc -->
+  <div id="clPathView">
+    <div class="cl-path-banner">
+      <div>
+        <h2>LỘ TRÌNH CHINH PHỤC BÀI 5 — BẢNG TUẦN HOÀN</h2>
+        <p>Hoàn thành 4 chặng để làm chủ Ký hiệu, Cấu hình electron, Bán kính nguyên tử & Ứng dụng thực tế!</p>
+      </div>
+      <div style="font-size:2.4rem;">🧪</div>
+    </div>
+    <div class="cl-path-list" id="clPathList"></div>
+  </div>
+
+  <!-- Màn hình 2: Khu vực làm bài -->
+  <div class="cl-arena" id="clArena">
+    <div class="cl-lesson-top">
+      <button class="cl-quit-btn" onclick="clExitLesson()" title="Thoát về bản đồ">&times;</button>
+      <div class="cl-prog-track"><div class="cl-prog-fill" id="clProgFill"></div></div>
+      <div style="font-weight:800; color:#ff4b4b; font-size:0.92rem;">❤️ <span id="clArenaHearts">5</span></div>
+    </div>
+
+    <div class="cl-mascot-row">
+      <div class="cl-mascot-icon" id="clMascot">⚛️</div>
+      <div class="cl-speech">
+        <div class="cl-q-type-tag" id="clQTypeTag">TRẮC NGHIỆM</div>
+        <div id="clQPrompt">Câu hỏi sẽ hiện ở đây...</div>
+      </div>
+    </div>
+
+    <div id="clQuestionBody"></div>
+
+    <div class="cl-action-bar" id="clActionBar">
+      <button class="cl-check-btn" id="clCheckBtn" onclick="clCheckAnswer()" disabled>KIỂM TRA</button>
+    </div>
+
+    <div class="cl-feedback" id="clFeedback">
+      <div style="flex:1;">
+        <div class="cl-fb-title" id="clFbTitle">Chính xác!</div>
+        <div class="cl-fb-desc" id="clFbDesc"></div>
+        <div id="clTwin3DWrap"></div>
+      </div>
+      <button class="cl-check-btn" id="clNextBtn" onclick="clNextQuestion()">TIẾP TỤC ➔</button>
+    </div>
+  </div>
+
+  <!-- Màn hình 3: Tổng kết chặng -->
+  <div class="cl-summary" id="clSummary">
+    <div style="font-size:3.6rem;">🏆</div>
+    <h2 style="color:#ffc800; font-size:1.5rem; margin-top:8px;" id="clSumTitle">HOÀN THÀNH CHẶNG!</h2>
+    <p style="color:#cbd5e1; font-size:0.9rem; margin-top:4px;">Điểm XP và chuỗi Streak của bạn đã được đồng bộ tự động với Bảng Tuần Hoàn 3D!</p>
+    <div class="cl-sum-grid">
+      <div class="cl-sum-box"><div class="cl-sum-val" id="clSumXP">+75</div><div class="cl-sum-lbl">TỔNG XP</div></div>
+      <div class="cl-sum-box"><div class="cl-sum-val" id="clSumAcc">100%</div><div class="cl-sum-lbl">CHÍNH XÁC</div></div>
+      <div class="cl-sum-box"><div class="cl-sum-val" id="clSumStreak">🔥 5</div><div class="cl-sum-lbl">CHUỖI ĐÚNG</div></div>
+    </div>
+    <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+      <button class="cl-check-btn" onclick="clExitLesson()">QUAY VỀ BẢN ĐỒ</button>
+      <a href="index.html" class="twin-btn sibling-link" style="padding:11px 20px;">🌐 SANG BẢNG 3D ↗</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Hệ sinh thái STEM Hóa học 10 • Đồng bộ tiến độ cùng <strong>index.html</strong> (Bảng Tuần Hoàn 3D)
+</footer>
+
+<script>
+const CL_STORAGE_KEY = "chemlingo_stem10_v1";
+let clState = {
+  xp: 0,
+  streak: 0,
+  hearts: 5,
+  completedUnits: [],
+  soundOn: true,
+  unlockAll: false
+};
+
+try {
+  const saved = JSON.parse(localStorage.getItem(CL_STORAGE_KEY));
+  if (saved && typeof saved === "object") {
+    clState = { ...clState, ...saved };
+  }
+} catch (e) {}
+
+function clSaveState() {
+  try { localStorage.setItem(CL_STORAGE_KEY, JSON.stringify(clState)); } catch (e) {}
+  document.getElementById("clStreak").textContent = clState.streak;
+  document.getElementById("clXP").textContent = clState.xp;
+  document.getElementById("clHearts").textContent = clState.hearts;
+  document.getElementById("clArenaHearts").textContent = clState.hearts;
+
+  const sb = document.getElementById("clSoundBtn");
+  sb.textContent = clState.soundOn ? "🔊 Âm thanh: Bật" : "🔇 Âm thanh: Tắt";
+  sb.classList.toggle("on", clState.soundOn);
+
+  const db = document.getElementById("clDemoBtn");
+  db.classList.toggle("on", clState.unlockAll);
+  db.textContent = clState.unlockAll ? "🎓 Đang mở hết 4 chặng" : "🎓 Mở hết (Thuyết trình)";
+}
+
+let clAudioCtx = null;
+function clPlayTone(type) {
+  if (!clState.soundOn) return;
+  try {
+    if (!clAudioCtx) clAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const now = clAudioCtx.currentTime;
+    const playNote = (freq, start, dur, wave = "sine", vol = 0.14) => {
+      const osc = clAudioCtx.createOscillator();
+      const gain = clAudioCtx.createGain();
+      osc.type = wave;
+      osc.frequency.setValueAtTime(freq, now + start);
+      gain.gain.setValueAtTime(vol, now + start);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + start + dur);
+      osc.connect(gain);
+      gain.connect(clAudioCtx.destination);
+      osc.start(now + start);
+      osc.stop(now + start + dur);
+    };
+    if (type === "ok") {
+      playNote(523.25, 0, 0.14, "triangle", 0.16);
+      playNote(659.25, 0.09, 0.22, "triangle", 0.18);
+    } else if (type === "err") {
+      playNote(220, 0, 0.16, "sawtooth", 0.12);
+      playNote(175, 0.12, 0.24, "sawtooth", 0.12);
+    } else if (type === "win") {
+      playNote(523.25, 0, 0.12, "triangle", 0.16);
+      playNote(659.25, 0.11, 0.12, "triangle", 0.16);
+      playNote(783.99, 0.22, 0.14, "triangle", 0.16);
+      playNote(1046.5, 0.35, 0.35, "triangle", 0.2);
+    }
+  } catch (e) {}
+}
+
+function clToggleSound() {
+  clState.soundOn = !clState.soundOn;
+  clSaveState();
+}
+
+function clToggleUnlockAll() {
+  clState.unlockAll = !clState.unlockAll;
+  clSaveState();
+  clRenderPath();
+}
+
+function clRefillHearts() {
+  clState.hearts = 5;
+  clSaveState();
+  clPlayTone("ok");
+}
+
+function clPrintQR() {
+  const url = encodeURIComponent(window.location.href.split('?')[0].split('#')[0]);
+  const win = window.open("", "_blank");
+  win.document.write(`
+    <html><head><title>In Mã QR ChemLingo</title>
+    <style>
+      body { font-family: sans-serif; text-align: center; padding: 30px; }
+      .card { display: inline-block; border: 2px dashed #2b8a00; border-radius: 16px; padding: 20px 28px; }
+      img { width: 180px; height: 180px; margin: 10px 0; }
+      @media print { button { display: none; } }
+    </style></head><body>
+      <div class="card">
+        <h2 style="margin:0;color:#2b8a00;">🦉 CHEMLINGO — HỌC HÓA 10</h2>
+        <p style="margin:4px 0 10px;font-size:13px;color:#475569;">Quét để luyện tập kiểu Duolingo & tích điểm XP!</p>
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${url}" />
+        <div style="font-size:12px;color:#334155;">Dán vào góc Bảng Tuần Hoàn Vật Lý</div>
+      </div><br><br>
+      <button onclick="window.print()" style="padding:10px 22px;font-size:15px;background:#58cc02;color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:bold;">🖨️ In Mã QR này</button>
+    </body></html>
+  `);
+}
+
+// 4 Chặng học bám sát Hóa 10 Bài 5, có refEl để nhảy thẳng sang Mô hình 3D ở index.html!
+const clUnits = [
+  {
+    id: 1,
+    icon: "🌱",
+    title: "Chặng 1: Nhập Môn Nguyên Tố",
+    desc: "Ký hiệu hóa học, tên gọi IUPAC & số hiệu nguyên tử Z (20 nguyên tố đầu)",
+    offset: "",
+    questions: [
+      {
+        type: "mcq",
+        prompt: "Ký hiệu hóa học nào là của nguyên tố Sodium (Natri, Z = 11)?",
+        options: ["Na", "S", "N", "Ne"],
+        answer: "Na",
+        refEl: "Na",
+        explain: "Sodium (Natri) có ký hiệu là Na (từ tiếng Latinh Natrium), số hiệu Z = 11."
+      },
+      {
+        type: "match",
+        prompt: "Ghép cặp Ký hiệu hóa học với Tên gọi IUPAC tương ứng:",
+        pairs: [
+          ["K", "Potassium (Kali)"],
+          ["C", "Carbon"],
+          ["Al", "Aluminium (Nhôm)"],
+          ["Cl", "Chlorine"]
+        ],
+        explain: "Tuyệt vời! Bạn đã nhớ chuẩn tên tiếng Anh IUPAC theo SGK Hóa 10 mới."
+      },
+      {
+        type: "mcq",
+        prompt: "Nguyên tố nào là Khí hiếm nằm ở Chu kỳ 1, Nhóm VIIIA?",
+        options: ["Helium (He)", "Hydrogen (H)", "Neon (Ne)", "Argon (Ar)"],
+        answer: "Helium (He)",
+        refEl: "He",
+        explain: "Helium (Z = 2) có 2 electron lớp ngoài cùng đã bão hòa lớp K nên thuộc nhóm VIIIA."
+      },
+      {
+        type: "mcq",
+        prompt: "Số hiệu nguyên tử Z của nguyên tố Calcium (Ca) bằng bao nhiêu?",
+        options: ["20", "19", "12", "18"],
+        answer: "20",
+        refEl: "Ca",
+        explain: "Calcium (Ca) là nguyên tố thứ 20 trong bảng tuần hoàn (Chu kỳ 4, Nhóm IIA)."
+      },
+      {
+        type: "match",
+        prompt: "Ghép nguyên tố với Phân loại chính xác của nó:",
+        pairs: [
+          ["Mg", "Kim loại kiềm thổ"],
+          ["O", "Phi kim"],
+          ["Ar", "Khí hiếm"],
+          ["Si", "Bán kim"]
+        ],
+        explain: "Mg (Nhóm IIA) là kim loại kiềm thổ, O là phi kim, Ar là khí hiếm và Si là bán kim."
+      }
+    ]
+  },
+  {
+    id: 2,
+    icon: "⚛️",
+    title: "Chặng 2: Giải Mã Vỏ Electron",
+    desc: "Xếp gạch cấu hình electron & xác định nhanh Chu kỳ, Nhóm A",
+    offset: "offset-right",
+    questions: [
+      {
+        type: "tiles",
+        prompt: "Xếp các phân lớp để tạo cấu hình electron đúng của Oxygen (O, Z = 8):",
+        correctSeq: ["1s²", "2s²", "2p⁴"],
+        distractors: ["2p⁶", "3s²"],
+        refEl: "O",
+        explain: "Z = 8 ➔ tổng số e = 2 + 2 + 4 = 8 (1s² 2s² 2p⁴)."
+      },
+      {
+        type: "tiles",
+        prompt: "Xếp cấu hình electron đầy đủ của Sodium (Na, Z = 11):",
+        correctSeq: ["1s²", "2s²", "2p⁶", "3s¹"],
+        distractors: ["3s²", "3p¹"],
+        refEl: "Na",
+        explain: "Na có 11e: 1s² 2s² 2p⁶ 3s¹ ➔ 3 lớp e (Chu kỳ 3) và 1e lớp ngoài cùng (Nhóm IA)."
+      },
+      {
+        type: "mcq",
+        prompt: "Nguyên tố X có cấu hình 1s² 2s² 2p⁶ 3s² 3p⁵ (Z = 17). Vị trí của X là:",
+        options: ["Chu kỳ 3, Nhóm VIIA", "Chu kỳ 3, Nhóm VA", "Chu kỳ 2, Nhóm VIIA", "Chu kỳ 4, Nhóm IA"],
+        answer: "Chu kỳ 3, Nhóm VIIA",
+        refEl: "Cl",
+        explain: "Có 3 lớp e (Chu kỳ 3) và lớp ngoài cùng 3s² 3p⁵ có 7e (Nhóm VIIA — Chlorine)."
+      },
+      {
+        type: "tiles",
+        prompt: "Xếp cấu hình electron của Aluminium (Al, Z = 13):",
+        correctSeq: ["1s²", "2s²", "2p⁶", "3s²", "3p¹"],
+        distractors: ["3p³", "4s¹"],
+        refEl: "Al",
+        explain: "Al (Z = 13) có 3e hóa trị (3s² 3p¹) nên thuộc Chu kỳ 3, Nhóm IIIA."
+      },
+      {
+        type: "mcq",
+        prompt: "Trong bảng tuần hoàn, số thứ tự Chu kỳ luôn bằng đại lượng nào?",
+        options: ["Số lớp electron", "Số electron lớp ngoài cùng", "Số neutron", "Nguyên tử khối"],
+        answer: "Số lớp electron",
+        explain: "Nguyên tắc vàng Hóa 10: Số thứ tự Chu kỳ = Số lớp electron trong nguyên tử."
+      }
+    ]
+  },
+  {
+    id: 3,
+    icon: "📏",
+    title: "Chặng 3: Quy Luật Tuần Hoàn",
+    desc: "So sánh bán kính nguyên tử, độ âm điện & tính kim loại / phi kim",
+    offset: "offset-left",
+    questions: [
+      {
+        type: "versus",
+        prompt: "Cùng ở Chu kỳ 3, nguyên tố nào có BÁN KÍNH NGUYÊN TỬ LỚN HƠN?",
+        left: { sym: "Na", sub: "Z = 11 (Nhóm IA)", val: "Na" },
+        right: { sym: "Cl", sub: "Z = 17 (Nhóm VIIA)", val: "Cl" },
+        answer: "Na",
+        refEl: "Na",
+        explain: "Trong cùng chu kỳ, đi từ trái sang phải điện tích hạt nhân tăng nên lực hút mạnh hơn ➔ bán kính giảm dần (Na 190 pm > Cl 79 pm)."
+      },
+      {
+        type: "versus",
+        prompt: "Cùng ở Nhóm IA, nguyên tố nào có BÁN KÍNH NGUYÊN TỬ LỚN HƠN?",
+        left: { sym: "Li", sub: "Z = 3 (Chu kỳ 2)", val: "Li" },
+        right: { sym: "K", sub: "Z = 19 (Chu kỳ 4)", val: "K" },
+        answer: "K",
+        refEl: "K",
+        explain: "Trong cùng nhóm A, đi từ trên xuống số lớp electron tăng dần (K có 4 lớp > Li có 2 lớp) ➔ bán kính K lớn hơn (243 pm > 167 pm)."
+      },
+      {
+        type: "mcq",
+        prompt: "Nguyên tố nào có ĐỘ ÂM ĐIỆN LỚN NHẤT trong toàn bộ Bảng tuần hoàn?",
+        options: ["Fluorine (F)", "Oxygen (O)", "Chlorine (Cl)", "Helium (He)"],
+        answer: "Fluorine (F)",
+        refEl: "F",
+        explain: "Fluorine (F) đứng ở góc trên bên phải (trừ khí hiếm), có độ âm điện lớn nhất bằng 3,98."
+      },
+      {
+        type: "versus",
+        prompt: "Nguyên tố nào có TÍNH KIM LOẠI MẠNH HƠN?",
+        left: { sym: "Na", sub: "Z = 11 (CK 3, IA)", val: "Na" },
+        right: { sym: "Mg", sub: "Z = 12 (CK 3, IIA)", val: "Mg" },
+        answer: "Na",
+        refEl: "Mg",
+        explain: "Trong cùng chu kỳ, từ trái sang phải bán kính giảm nên khả năng nhường e giảm ➔ tính kim loại giảm dần (Na > Mg > Al)."
+      },
+      {
+        type: "mcq",
+        prompt: "Thứ tự bán kính nguyên tử GIẢM DẦN đúng cho Chu kỳ 2 là:",
+        options: ["Li > C > O > F", "F > O > C > Li", "C > Li > F > O", "O > F > Li > C"],
+        answer: "Li > C > O > F",
+        refEl: "Li",
+        explain: "Đi từ trái sang phải Chu kỳ 2 (Li ➔ C ➔ O ➔ F), bán kính giảm dần đều: 167 > 67 > 48 > 42 pm."
+      }
+    ]
+  },
+  {
+    id: 4,
+    icon: "🧪",
+    title: "Chặng 4: Thử Thách Ứng Dụng",
+    desc: "Liên hệ thực tế đời sống & phản ứng hóa học cơ bản",
+    offset: "",
+    questions: [
+      {
+        type: "match",
+        prompt: "Ghép nguyên tố với Ứng dụng thực tế quen thuộc quanh ta:",
+        pairs: [
+          ["Li", "Pin sạc điện thoại, xe điện"],
+          ["Al", "Giấy bạc, vỏ lon nước ngọt"],
+          ["Si", "Chip vi xử lý bán dẫn"],
+          ["Ca", "Cấu tạo xương, răng, phấn viết"]
+        ],
+        explain: "Chính xác! Những nguyên tố này xuất hiện ngay trong đồ dùng hàng ngày của chúng ta."
+      },
+      {
+        type: "mcq",
+        prompt: "Phản ứng giữa Kim loại Natri (Na) và Khí Clo (Cl₂) tạo ra chất quen thuộc nào?",
+        options: ["Muối ăn (NaCl)", "Nước tẩy Javel", "Vôi sống (CaO)", "Axit HCl"],
+        answer: "Muối ăn (NaCl)",
+        refEl: "Na",
+        explain: "2Na + Cl₂ → 2NaCl (Sodium Chloride — muối ăn hàng ngày)."
+      },
+      {
+        type: "mcq",
+        prompt: "Nguyên tố nào chiếm khoảng 78% thể tích không khí và dùng sản xuất phân đạm?",
+        options: ["Nitrogen (N)", "Oxygen (O)", "Carbon (C)", "Argon (Ar)"],
+        answer: "Nitrogen (N)",
+        refEl: "N",
+        explain: "Khí N₂ chiếm ~78% không khí và là nguyên liệu chính tổng hợp NH₃ sản xuất phân đạm."
+      },
+      {
+        type: "mcq",
+        prompt: "Ruột bút chì đen và kim cương đều được tạo nên từ cùng một nguyên tố nào?",
+        options: ["Carbon (C)", "Silicon (Si)", "Sulfur (S)", "Phosphorus (P)"],
+        answer: "Carbon (C)",
+        refEl: "C",
+        explain: "Than chì (graphite) và kim cương là hai dạng thù hình nổi tiếng của Carbon (Z = 6)."
+      },
+      {
+        type: "match",
+        prompt: "Ghép cặp phản ứng hóa học với Sản phẩm tương ứng:",
+        pairs: [
+          ["2H₂ + O₂", "2H₂O (Nước)"],
+          ["2Mg + O₂", "2MgO (Ánh sáng chói lòa)"],
+          ["C + O₂", "CO₂ (Khí tạo ga)"],
+          ["2Ca + O₂", "2CaO (Vôi sống)"]
+        ],
+        explain: "Xuất sắc! Bạn đã hoàn thành trọn vẹn 4 chặng ChemLingo!"
+      }
+    ]
+  }
+];
+
+let clCurrentUnit = null;
+let clQIndex = 0;
+let clCorrectCount = 0;
+let clSessionXP = 0;
+let clSelectedAnswer = null;
+let clTilePicked = [];
+let clMatchLeft = null;
+let clMatchMatched = 0;
+let clQuestionLocked = false;
+
+function clRenderPath() {
+  clSaveState();
+  const list = document.getElementById("clPathList");
+  list.innerHTML = clUnits.map((u, idx) => {
+    const done = clState.completedUnits.includes(u.id);
+    const unlocked = clState.unlockAll || idx === 0 || clState.completedUnits.includes(clUnits[idx - 1].id);
+    const statusClass = done ? "completed" : (unlocked ? "unlocked" : "locked");
+    const badge = (!done && unlocked)
+      ? `<span class="cl-node-badge">BẮT ĐẦU</span>`
+      : (done ? `<span class="cl-node-badge" style="color:#ffc800;border-color:#ffc800;">★ XONG</span>` : "");
+    return `
+      <div class="cl-node-row ${u.offset}">
+        <button class="cl-node-btn ${statusClass}" onclick="${unlocked ? `clStartUnit(${u.id})` : 'clLockedToast()'}" title="${u.title}">
+          ${badge}
+          <span>${unlocked ? u.icon : "🔒"}</span>
+        </button>
+        <div class="cl-node-info" style="opacity:${unlocked ? 1 : 0.55};">
+          <h3>${u.title}</h3>
+          <p>${u.desc}</p>
+          <div class="cl-node-meta">${done ? "⭐ Đã hoàn thành • Bấm để luyện lại (+XP)" : (unlocked ? `🎯 ${u.questions.length} câu tương tác • +${u.questions.length * 15} XP` : "🔒 Hoàn thành chặng trước để mở khóa")}</div>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function clLockedToast() {
+  clPlayTone("err");
+  alert("🔒 Hãy hoàn thành chặng trước để mở khóa (hoặc bấm nút '🎓 Mở hết (Thuyết trình)' ở thanh trên)!");
+}
+
+function clStartUnit(unitId) {
+  if (clState.hearts <= 0) {
+    if (confirm("❤️ Bạn đã hết tim! Bấm OK để hồi đầy 5 tim và bắt đầu luyện tập ngay nhé?")) {
+      clState.hearts = 5;
+      clSaveState();
+    } else return;
+  }
+  clCurrentUnit = clUnits.find(u => u.id === unitId);
+  clQIndex = 0;
+  clCorrectCount = 0;
+  clSessionXP = 0;
+  document.getElementById("clPathView").style.display = "none";
+  document.getElementById("clSummary").classList.remove("active");
+  document.getElementById("clArena").classList.add("active");
+  clRenderQuestion();
+}
+
+function clExitLesson() {
+  document.getElementById("clArena").classList.remove("active");
+  document.getElementById("clSummary").classList.remove("active");
+  document.getElementById("clPathView").style.display = "block";
+  clRenderPath();
+}
+
+function clRenderQuestion() {
+  const q = clCurrentUnit.questions[clQIndex];
+  clSelectedAnswer = null;
+  clTilePicked = [];
+  clMatchLeft = null;
+  clMatchMatched = 0;
+  clQuestionLocked = false;
+
+  const pct = Math.round((clQIndex / clCurrentUnit.questions.length) * 100);
+  document.getElementById("clProgFill").style.width = pct + "%";
+  document.getElementById("clMascot").textContent = "⚛️";
+  document.getElementById("clQPrompt").textContent = q.prompt;
+  document.getElementById("clFeedback").className = "cl-feedback";
+  document.getElementById("clTwin3DWrap").innerHTML = "";
+  document.getElementById("clActionBar").style.display = "flex";
+  document.getElementById("clCheckBtn").disabled = true;
+
+  const body = document.getElementById("clQuestionBody");
+  const tag = document.getElementById("clQTypeTag");
+
+  if (q.type === "mcq") {
+    tag.textContent = "🎯 CHỌN ĐÁP ÁN ĐÚNG";
+    const shuffled = [...q.options].sort(() => Math.random() - 0.5);
+    body.innerHTML = `<div class="cl-mcq-grid">${shuffled.map((opt, i) => `
+      <button class="cl-opt-card" data-val="${opt}" onclick="clPickMCQ(this)">
+        <span class="cl-opt-key">${i + 1}</span>
+        <span>${opt}</span>
+      </button>
+    `).join("")}</div>`;
+  } else if (q.type === "tiles") {
+    tag.textContent = "🧩 XẾP GẠCH CẤU HÌNH ELECTRON";
+    const bank = [...q.correctSeq, ...q.distractors].sort(() => Math.random() - 0.5);
+    body.innerHTML = `
+      <div class="cl-tile-answer" id="clTileAnswer"><span style="color:#64748b;font-size:0.84rem;">Chạm vào các khối phân lớp bên dưới theo đúng thứ tự...</span></div>
+      <div class="cl-tile-bank" id="clTileBank">
+        ${bank.map((t, idx) => `<button class="cl-tile" id="clBankTile_${idx}" onclick="clAddTile(${idx}, '${t}')">${t}</button>`).join("")}
+      </div>
+    `;
+  } else if (q.type === "versus") {
+    tag.textContent = "⚖️ SO SÁNH NHANH QUY LUẬT";
+    body.innerHTML = `
+      <div class="cl-vs-grid">
+        <button class="cl-vs-card" data-val="${q.left.val}" onclick="clPickVS(this)">
+          <div class="cl-vs-sym">${q.left.sym}</div>
+          <div class="cl-vs-sub">${q.left.sub}</div>
+        </button>
+        <div class="cl-vs-badge">VS</div>
+        <button class="cl-vs-card" data-val="${q.right.val}" onclick="clPickVS(this)">
+          <div class="cl-vs-sym">${q.right.sym}</div>
+          <div class="cl-vs-sub">${q.right.sub}</div>
+        </button>
+      </div>
+    `;
+  } else if (q.type === "match") {
+    tag.textContent = "⚡ GHÉP CẶP SIÊU TỐC (CHỌN 1 TRÁI + 1 PHẢI)";
+    document.getElementById("clActionBar").style.display = "none";
+    const lefts = q.pairs.map((p, i) => ({ txt: p[0], id: i })).sort(() => Math.random() - 0.5);
+    const rights = q.pairs.map((p, i) => ({ txt: p[1], id: i })).sort(() => Math.random() - 0.5);
+    body.innerHTML = `
+      <div class="cl-match-grid">
+        <div class="cl-match-col">${lefts.map(x => `<button class="cl-match-btn" data-side="L" data-id="${x.id}" onclick="clPickMatch(this)">${x.txt}</button>`).join("")}</div>
+        <div class="cl-match-col">${rights.map(x => `<button class="cl-match-btn" data-side="R" data-id="${x.id}" onclick="clPickMatch(this)">${x.txt}</button>`).join("")}</div>
+      </div>
+    `;
+  }
+}
+
+function clPickMCQ(btn) {
+  if (clQuestionLocked) return;
+  document.querySelectorAll(".cl-opt-card").forEach(b => b.classList.remove("selected"));
+  btn.classList.add("selected");
+  clSelectedAnswer = btn.dataset.val;
+  document.getElementById("clCheckBtn").disabled = false;
+}
+
+function clPickVS(btn) {
+  if (clQuestionLocked) return;
+  document.querySelectorAll(".cl-vs-card").forEach(b => b.classList.remove("selected"));
+  btn.classList.add("selected");
+  clSelectedAnswer = btn.dataset.val;
+  document.getElementById("clCheckBtn").disabled = false;
+}
+
+function clAddTile(idx, text) {
+  if (clQuestionLocked) return;
+  document.getElementById("clBankTile_" + idx).classList.add("used");
+  clTilePicked.push({ idx, text });
+  clRenderTileAnswer();
+}
+
+function clRemoveTile(pos) {
+  if (clQuestionLocked) return;
+  const item = clTilePicked.splice(pos, 1)[0];
+  const bankBtn = document.getElementById("clBankTile_" + item.idx);
+  if (bankBtn) bankBtn.classList.remove("used");
+  clRenderTileAnswer();
+}
+
+function clRenderTileAnswer() {
+  const box = document.getElementById("clTileAnswer");
+  if (clTilePicked.length === 0) {
+    box.innerHTML = `<span style="color:#64748b;font-size:0.84rem;">Chạm vào các khối phân lớp bên dưới theo đúng thứ tự...</span>`;
+    document.getElementById("clCheckBtn").disabled = true;
+  } else {
+    box.innerHTML = clTilePicked.map((item, pos) => `<button class="cl-tile" style="border-color:#38bdf8;" onclick="clRemoveTile(${pos})">${item.text}</button>`).join("");
+    document.getElementById("clCheckBtn").disabled = false;
+  }
+}
+
+function clPickMatch(btn) {
+  if (clQuestionLocked || btn.classList.contains("matched")) return;
+  const side = btn.dataset.side;
+  if (side === "L") {
+    document.querySelectorAll('.cl-match-btn[data-side="L"]').forEach(b => b.classList.remove("selected"));
+    btn.classList.add("selected");
+    clMatchLeft = btn;
+  } else if (side === "R" && clMatchLeft) {
+    const q = clCurrentUnit.questions[clQIndex];
+    if (clMatchLeft.dataset.id === btn.dataset.id) {
+      clMatchLeft.classList.remove("selected");
+      clMatchLeft.classList.add("matched");
+      btn.classList.add("matched");
+      clMatchLeft = null;
+      clMatchMatched++;
+      clPlayTone("ok");
+      if (clMatchMatched === q.pairs.length) {
+        clShowResult(true, q.explain, q.refEl);
+      }
+    } else {
+      const prevL = clMatchLeft;
+      prevL.classList.add("shake");
+      btn.classList.add("shake");
+      clPlayTone("err");
+      clState.hearts = Math.max(0, clState.hearts - 1);
+      clSaveState();
+      setTimeout(() => {
+        prevL.classList.remove("shake", "selected");
+        btn.classList.remove("shake");
+      }, 400);
+      clMatchLeft = null;
+      if (clState.hearts <= 0) {
+        clShowResult(false, "Bạn đã hết tim! Hãy hồi tim ở thanh trên để tiếp tục nhé.");
+      }
+    }
+  }
+}
+
+function clCheckAnswer() {
+  if (clQuestionLocked) return;
+  const q = clCurrentUnit.questions[clQIndex];
+  let isOk = false;
+
+  if (q.type === "mcq" || q.type === "versus") {
+    isOk = (clSelectedAnswer === q.answer);
+    const selector = q.type === "mcq" ? ".cl-opt-card" : ".cl-vs-card";
+    document.querySelectorAll(selector).forEach(b => {
+      b.disabled = true;
+      if (b.dataset.val === q.answer) b.classList.add("correct");
+      else if (b.dataset.val === clSelectedAnswer && !isOk) b.classList.add("wrong");
+    });
+  } else if (q.type === "tiles") {
+    isOk = (clTilePicked.map(x => x.text).join(" ") === q.correctSeq.join(" "));
+  }
+
+  clShowResult(isOk, q.explain, q.refEl);
+}
+
+function clShowResult(isOk, explain, refEl) {
+  clQuestionLocked = true;
+  document.getElementById("clActionBar").style.display = "none";
+  const fb = document.getElementById("clFeedback");
+  const title = document.getElementById("clFbTitle");
+  const desc = document.getElementById("clFbDesc");
+  const mascot = document.getElementById("clMascot");
+  const twinWrap = document.getElementById("clTwin3DWrap");
+
+  if (isOk) {
+    clCorrectCount++;
+    clSessionXP += 15;
+    clState.xp += 15;
+    clState.streak += 1;
+    clPlayTone("ok");
+    mascot.textContent = "🥳";
+    fb.className = "cl-feedback show ok";
+    title.style.color = "#89e219";
+    title.textContent = "🎉 Chính xác! +15 XP";
+  } else {
+    clState.streak = 0;
+    clState.hearts = Math.max(0, clState.hearts - 1);
+    clPlayTone("err");
+    mascot.textContent = "😅";
+    fb.className = "cl-feedback show err";
+    title.style.color = "#ff6b6b";
+    title.textContent = "❌ Chưa đúng rồi! (-1 ❤️)";
+  }
+  desc.textContent = explain;
+
+  // Kết nối 2 chiều: cho phép bấm xem ngay mô hình 3D của nguyên tố trên Web anh em (index.html)
+  if (refEl) {
+    twinWrap.innerHTML = `<a href="index.html?el=${refEl}" target="_blank" class="twin-3d-jump">⚛️ Xem mô hình 3D nguyên tố ${refEl} trên Bảng Tuần Hoàn ↗</a>`;
+  } else {
+    twinWrap.innerHTML = "";
+  }
+  clSaveState();
+}
+
+function clNextQuestion() {
+  if (clState.hearts <= 0) {
+    alert("❤️ Bạn đã hết tim trong lượt này! Hệ thống sẽ đưa bạn về bản đồ để hồi tim nhé.");
+    clExitLesson();
+    return;
+  }
+  clQIndex++;
+  if (clQIndex < clCurrentUnit.questions.length) {
+    clRenderQuestion();
+  } else {
+    document.getElementById("clProgFill").style.width = "100%";
+    if (!clState.completedUnits.includes(clCurrentUnit.id)) {
+      clState.completedUnits.push(clCurrentUnit.id);
+    }
+    clSaveState();
+    clPlayTone("win");
+    document.getElementById("clArena").classList.remove("active");
+    document.getElementById("clSummary").classList.add("active");
+    const acc = Math.round((clCorrectCount / clCurrentUnit.questions.length) * 100);
+    document.getElementById("clSumTitle").textContent = "HOÀN THÀNH " + clCurrentUnit.title.toUpperCase() + "!";
+    document.getElementById("clSumXP").textContent = "+" + clSessionXP;
+    document.getElementById("clSumAcc").textContent = acc + "%";
+    document.getElementById("clSumStreak").textContent = "🔥 " + clState.streak;
+  }
+}
+
+clRenderPath();
+</script>
+</body>
+</html>
