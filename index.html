@@ -1901,14 +1901,33 @@ qrBtn.onclick = () => {
   const win = window.open("", "_blank");
   const list = elements.filter(e => e.z <= 20);
   win.document.write(`
-    <html><head><title>In Mã QR Từng Nguyên Tố</title>
+    <html><head><title>In Mã QR Từng Nguyên Tố (2.8 x 2.5 cm)</title>
     <style>
-      body { font-family: sans-serif; padding: 20px; text-align: center; }
-      .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; max-width: 800px; margin: 20px auto; }
-      .item { border: 1px dashed #333; padding: 8px; border-radius: 6px; page-break-inside: avoid; }
-      .item img { width: 90px; height: 90px; }
-      .label { font-weight: bold; margin-top: 4px; font-size: 12px; }
-      @media print { button { display: none; } }
+      @page { size: A4; margin: 1cm; }
+      * { box-sizing: border-box; }
+      body { font-family: sans-serif; padding: 10px; text-align: center; margin: 0; }
+      .grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25cm;
+        justify-content: center;
+        margin: 14px auto;
+      }
+      .item {
+        width: 2.8cm;
+        height: 2.5cm;
+        border: 0.5pt dashed #333;
+        padding: 0.1cm;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        page-break-inside: avoid;
+        overflow: hidden;
+      }
+      .item img { width: 1.85cm; height: 1.85cm; display: block; }
+      .label { font-weight: bold; margin-top: 0.06cm; font-size: 7.5pt; line-height: 1.1; white-space: nowrap; }
+      @media print { button, .print-note { display: none; } }
     
     /* Thanh chia 2 Mục chính (Main Tabs) */
     .main-tabs {
