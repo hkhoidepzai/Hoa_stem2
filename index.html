@@ -11,12 +11,13 @@
       --text: #f8fafc;
       --text-muted: #94a3b8;
       --accent: #38bdf8;
-      --metal: #ef4444;
-      --transition: #f97316;
-      --metalloid: #10b981;
-      --nonmetal: #3b82f6;
-      --noble: #eab308;
-      --rare: #a855f7;
+      --metal: #4f8ec9;        /* Xanh dương - Kim loại (SGK) */
+      --transition: #d4a84f;   /* Vàng đất - Kim loại chuyển tiếp (SGK) */
+      --metalloid: #d96b78;    /* Hồng đỏ - Phi kim/Bán kim (SGK) */
+      --nonmetal: #d96b78;     /* Hồng đỏ - Phi kim (SGK) */
+      --noble: #76a853;        /* Xanh lá - Khí hiếm (SGK) */
+      --rare: #d4a84f;         /* Vàng đất - Lantan & Actini (SGK) */
+      --hydrogen: #94a3b8;     /* Xám sáng - Hydrogen (SGK) */
     }
 
     * {
@@ -105,7 +106,7 @@
     .b-trans { background: var(--transition); }
     .b-metalloid { background: var(--metalloid); }
     .b-nonmetal { background: var(--nonmetal); }
-    .b-noble { background: var(--noble); color: #000; }
+    .b-noble { background: var(--noble); color: #fff; }
     .b-rare { background: var(--rare); }
     .b-qr { background: #ec4899; }
     .b-cmp { background: #06b6d4; color: #000; font-weight: 700; }
@@ -176,12 +177,13 @@
       box-shadow: 0 6px 16px rgba(0,0,0,0.6);
     }
 
-    .el.metal { border-color: var(--metal); background: rgba(239,68,68,0.15); }
-    .el.trans { border-color: var(--transition); background: rgba(249,115,22,0.15); }
-    .el.metalloid { border-color: var(--metalloid); background: rgba(16,185,129,0.15); }
-    .el.nonmetal { border-color: var(--nonmetal); background: rgba(59,130,246,0.15); }
-    .el.noble { border-color: var(--noble); background: rgba(234,179,8,0.15); }
-    .el.rare { border-color: var(--rare); background: rgba(168,85,247,0.15); }
+    .el.metal { border-color: #60a5fa; background: rgba(79, 142, 201, 0.38); }
+    .el.trans { border-color: #eab308; background: rgba(212, 168, 79, 0.34); }
+    .el.metalloid { border-color: #f472b6; background: rgba(217, 107, 120, 0.38); }
+    .el.nonmetal { border-color: #fb7185; background: rgba(217, 107, 120, 0.38); }
+    .el.noble { border-color: #84cc16; background: rgba(118, 168, 83, 0.38); }
+    .el.rare { border-color: #eab308; background: rgba(212, 168, 79, 0.34); }
+    .el.hydrogen { border-color: #cbd5e1; background: rgba(148, 163, 184, 0.30); }
     .el.dimmed { opacity: 0.12; filter: grayscale(90%); transform: scale(0.95); }
 
     .badge-3d {
@@ -197,11 +199,11 @@
     }
 
     .el-placeholder {
-      background: rgba(168,85,247,0.08);
+      background: rgba(212,168,79,0.16);
       border: 1px dashed var(--rare);
       border-radius: 6px;
       font-size: 0.6rem;
-      color: #d8b4fe;
+      color: #fde047;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -1024,12 +1026,9 @@
 
 <!-- THANH ĐIỀU HƯỚNG & LIÊN KẾT ANH EM SINH ĐÔI -->
 <div class="main-tabs">
-  <button class="main-tab-btn active" id="tabBtn1" onclick="switchMainTab(1)">
+  <span class="main-tab-btn active" style="cursor:default;">
     🌐 BẢNG TUẦN HOÀN SỐ 3D
-  </button>
-  <button class="main-tab-btn" id="tabBtn2" onclick="switchMainTab(2)">
-    🛠️ HƯỚNG DẪN LÀM BẢNG VẬT LÝ
-  </button>
+  </span>
   <a href="chemlingo.html" class="main-tab-btn twin-link-btn" id="twinChemLingoBtn">
     🦉 CHEMLINGO (HỌC NHƯ DUOLINGO) <span class="twin-pill" id="twinXpBadge">APP RIÊNG ↗</span>
   </a>
@@ -1041,12 +1040,11 @@
 <div class="controls">
   <input type="text" class="search-input" id="search" placeholder="🔍 Tìm ký hiệu, tên, số Z (VD: Na, 11)..." oninput="searchEl(this.value)">
   <button class="filter-btn b-all active" onclick="filterEl('all', this)">Tất cả (118)</button>
-  <button class="filter-btn b-metal" onclick="filterEl('metal', this)">Kim loại nhóm A</button>
-  <button class="filter-btn b-trans" onclick="filterEl('trans', this)">Kim loại chuyển tiếp</button>
-  <button class="filter-btn b-metalloid" onclick="filterEl('metalloid', this)">Bán kim</button>
+  <button class="filter-btn b-metal" onclick="filterEl('metal', this)">Kim loại</button>
+  <button class="filter-btn b-trans" style="color:#000;" onclick="filterEl('trans', this)">Kim loại chuyển tiếp</button>
   <button class="filter-btn b-nonmetal" onclick="filterEl('nonmetal', this)">Phi kim</button>
   <button class="filter-btn b-noble" onclick="filterEl('noble', this)">Khí hiếm</button>
-  <button class="filter-btn b-rare" onclick="filterEl('rare', this)">Lantan & Actini</button>
+  <button class="filter-btn b-rare" style="color:#000;" onclick="filterEl('rare', this)">Lantan & Actini</button>
   <button class="filter-btn" style="background:#10b981;color:#000;font-weight:700;" onclick="document.getElementById('labSection').scrollIntoView({behavior:'smooth'})">🧪 Thí Nghiệm Ghép Chất</button>
   <button class="filter-btn b-cmp" onclick="document.getElementById('compareSection').scrollIntoView({behavior:'smooth'})">🧲 Kéo Thả So Sánh</button>
 </div>
@@ -1118,146 +1116,7 @@
 
 </div> <!-- Đóng Mục 1 -->
 
-<!-- MỤC 2: HƯỚNG DẪN CHI TIẾT TỪNG BƯỚC LÀM BẢNG TUẦN HOÀN VẬT LÝ -->
-<div class="tab-section" id="mainTab2">
-  <div class="diy-container">
 
-    <!-- Tổng quan mô hình & Chi phí -->
-    <div class="diy-card">
-      <h2>📦 1. Chuẩn Bị Vật Liệu & Chi Phí Tiết Kiệm (Dưới 50.000đ)</h2>
-      <p style="font-size:0.88rem; color:#cbd5e1; margin-bottom:12px;">
-        Mô hình <strong>"Bảng Tuần Hoàn Cửa Sổ Lật 3 Lớp (Flip-Card) kết hợp Mẫu Vật Thật & Web QR"</strong> giúp kết hợp trực quan vật lý với công nghệ số mà không cần mạch điện phức tạp. Bạn có thể tích vào các ô bên dưới để kiểm tra tiến độ chuẩn bị vật tư:
-      </p>
-      <div class="diy-grid-2">
-        <div>
-          <label class="check-item"><input type="checkbox"> <span><strong>Tấm bìa carton cứng khổ A2 (42 × 60 cm):</strong> Tận dụng từ vỏ thùng mì tôm/thùng hàng cũ (<strong>0đ</strong>).</span></label>
-          <label class="check-item"><input type="checkbox"> <span><strong>Giấy bìa màu A4 cứng (3 màu):</strong> Đỏ/Hồng (Kim loại), Xanh dương (Phi kim), Vàng (Khí hiếm) (<strong>~20.000đ</strong>).</span></label>
-          <label class="check-item"><input type="checkbox"> <span><strong>Bản in Mã QR (1-2 tờ A4):</strong> Bấm nút <em>"🖨️ Tạo QR Từng Nguyên Tố"</em> ở Mục 1 để in ra giấy (<strong>~5.000đ</strong>).</span></label>
-        </div>
-        <div>
-          <label class="check-item"><input type="checkbox"> <span><strong>Vật mẫu thực tế quanh nhà:</strong> Ruột bút chì (C), giấy bạc (Al), dây đồng (Cu), muối ăn (Na/Cl)... (<strong>0đ</strong>).</span></label>
-          <label class="check-item"><input type="checkbox"> <span><strong>Băng dính 2 mặt xốp / Nhám dính Velcro:</strong> Để gắn thẻ nguyên tố tháo lắp linh hoạt khi thuyết trình (<strong>~15.000đ</strong>).</span></label>
-          <label class="check-item"><input type="checkbox"> <span><strong>Dụng cụ cơ bản:</strong> Kéo, thước kẻ, bút dạ nhiều màu, băng dính trong (<strong>Tận dụng đồ sẵn có</strong>).</span></label>
-        </div>
-      </div>
-    </div>
-
-    <!-- Sơ đồ kích thước bản vẽ kỹ thuật -->
-    <div class="diy-card">
-      <h2>📐 2. Bản Vẽ Kích Thước Kỹ Thuật Trên Bìa Carton A2 (42 × 60 cm)</h2>
-      <p style="font-size:0.88rem; color:#cbd5e1;">
-        Để bảng cân đối và dễ nhìn từ cuối lớp, nhóm tập trung làm <strong>20 thẻ lật 3D cho 20 nguyên tố đầu tiên</strong> (Chu kỳ 1 đến Chu kỳ 4, từ Nhóm IA đến VIIIA):
-      </p>
-      <div class="blueprint-box">
-        <div style="font-weight:800; color:#facc15; margin-bottom:6px;">SƠ ĐỒ CHIA TỶ LỆ MẶT BẢNG A2 (NGANG 60 CM × CAO 42 CM)</div>
-        <p style="font-size:0.83rem; color:#e2e8f0;">
-          • <strong>Lề trên cùng (Cao 8 cm):</strong> Ghi tiêu đề lớn <em>"BẢNG TUẦN HOÀN TRONG TẦM TAY"</em> + Dán 1 Mã QR Tổng dẫn vào Web.<br>
-          • <strong>Hàng tiêu đề Nhóm (Cao 4 cm):</strong> Chia 8 cột ngang ghi rõ <strong>Nhóm IA, IIA, IIIA, IVA, VA, VIA, VIIA, VIIIA</strong>.<br>
-          • <strong>Cột tiêu đề Chu kỳ bên trái (Rộng 6 cm):</strong> Chia 4 hàng dọc ghi rõ <strong>Chu kỳ 1, Chu kỳ 2, Chu kỳ 3, Chu kỳ 4</strong>.<br>
-          • <strong>Lưới 20 Ô Nguyên Tố (8 cột × 4 hàng):</strong> Mỗi ô nguyên tố là một hình vuông <strong>6 × 6 cm</strong> (8 cột × 6 cm = 48 cm chiều ngang; 4 hàng × 6 cm = 24 cm chiều dọc).
-        </p>
-      </div>
-    </div>
-
-    <!-- Cấu tạo thẻ lật 3 lớp -->
-    <div class="diy-card">
-      <h2>🃏 3. Cấu Tạo Mỗi Ô "Cửa Sổ Lật 3 Lớp" (Dải Giấy 6 × 18 cm Gấp Chữ Z)</h2>
-      <p style="font-size:0.88rem; color:#cbd5e1;">
-        Thay vì cắt 3 mảnh rời tốn công dán bản lề, bạn chỉ cần cắt 1 dải giấy màu kích thước <strong>6 × 18 cm</strong>, chia làm 3 đoạn <strong>6 × 6 cm</strong> rồi gấp zic-zắc (chữ Z):
-      </p>
-      <div class="flip-demo-grid">
-        <div class="flip-layer" style="border-color:#ef4444;">
-          <strong>LỚP 1 (Mặt Ngoài Cùng - 6×6 cm)</strong>
-          <p style="font-size:0.82rem; color:#cbd5e1;">
-            • Ghi <strong>Ký hiệu hóa học</strong> thật to ở giữa (VD: Na, Al, C).<br>
-            • Góc trên trái ghi <strong>Số hiệu Z</strong>, góc trên phải ghi <strong>Nguyên tử khối</strong>.<br>
-            • Dưới cùng ghi <strong>Tên nguyên tố</strong> chuẩn IUPAC.
-          </p>
-        </div>
-        <div class="flip-layer" style="border-color:#38bdf8;">
-          <strong>LỚP 2 (Lật Mở Ra - 6×6 cm)</strong>
-          <p style="font-size:0.82rem; color:#cbd5e1;">
-            • Ghi <strong>Cấu hình electron</strong> (VD: 1s² 2s² 2p⁶ 3s¹).<br>
-            • Vẽ nhanh các vòng tròn đồng tâm biểu diễn <strong>số lớp e (Chu kỳ)</strong> và <strong>số e lớp ngoài cùng (Nhóm)</strong>.<br>
-            • Ghi <strong>Bán kính nguyên tử (pm)</strong>.
-          </p>
-        </div>
-        <div class="flip-layer" style="border-color:#10b981;">
-          <strong>LỚP 3 (Đế Trong Cùng - 6×6 cm)</strong>
-          <p style="font-size:0.82rem; color:#cbd5e1;">
-            • <strong>Nửa bên trái:</strong> Dán <strong>Vật mẫu thật</strong> bằng băng dính trong hoặc túi zip mini.<br>
-            • <strong>Nửa bên phải:</strong> Dán <strong>Mã QR riêng</strong> của nguyên tố đó để quét mở Mô hình 3D trên điện thoại.
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Quy trình 4 bước thi công -->
-    <div class="diy-card">
-      <h2>🛠️ 4. Hướng Dẫn Thi Công Chi Tiết Từng Bước (Làm Xong Trong 1 Buổi)</h2>
-      <div class="diy-grid-2">
-        <div class="step-card">
-          <span class="step-badge">BƯỚC 1 (30 Phút)</span>
-          <h3>Bọc nền & Kẻ khung Bảng Tuần Hoàn</h3>
-          <ul>
-            <li>Cắt tấm bìa carton phẳng 42 × 60 cm, bọc giấy màu sáng hoặc giấy trắng làm nền.</li>
-            <li>Dùng thước và bút dạ kẻ bảng 4 hàng Chu kỳ × 8 cột Nhóm A (mỗi ô 6 × 6 cm).</li>
-            <li>Lưu ý ở Chu kỳ 1 chỉ giữ lại ô cột IA (cho H) và cột VIIIA (cho He), các ô giữa để trống đúng cấu tạo bảng tuần hoàn.</li>
-          </ul>
-        </div>
-
-        <div class="step-card">
-          <span class="step-badge">BƯỚC 2 (45 Phút)</span>
-          <h3>Cắt & Gấp 20 Phôi Thẻ Lật Chữ Z</h3>
-          <ul>
-            <li>Dùng giấy bìa màu Đỏ/Hồng cắt 7 dải (6 × 18 cm) cho 7 Kim loại (Li, Be, Na, Mg, Al, K, Ca).</li>
-            <li>Dùng giấy bìa Xanh dương cắt 10 dải cho Phi kim & Bán kim (H, B, C, N, O, F, Si, P, S, Cl).</li>
-            <li>Dùng giấy bìa Vàng cắt 3 dải cho 3 Khí hiếm (He, Ne, Ar). Gấp mỗi dải làm 3 phần đều nhau (6 × 6 cm).</li>
-          </ul>
-        </div>
-
-        <div class="step-card">
-          <span class="step-badge">BƯỚC 3 (45 Phút)</span>
-          <h3>Viết Thông Số & Đính Vật Mẫu Thật</h3>
-          <ul>
-            <li>Chép thông tin từ Bảng tra cứu ở Mục 5 bên dưới vào Mặt 1 và Mặt 2 của từng thẻ.</li>
-            <li>Ở Mặt 3, dùng băng dính trong cố định mẫu vật nhỏ (mẩu ruột chì, giấy bạc, hạt muối, dây đồng...) vào nửa bên trái.</li>
-          </ul>
-        </div>
-
-        <div class="step-card">
-          <span class="step-badge">BƯỚC 4 (20 Phút)</span>
-          <h3>In Mã QR & Lắp Ráp Tháo Rời Linh Hoạt</h3>
-          <ul>
-            <li>Chuyển sang <strong>Mục 1</strong>, bấm nút hồng <strong>"🖨️ Tạo QR Từng Nguyên Tố"</strong> để in 20 mã QR, cắt dán vào nửa phải Mặt 3.</li>
-            <li>Dán băng nhám Velcro (hoặc băng dính xốp 2 mặt) vào mặt sau của thẻ rồi gắn lên bảng carton để có thể tháo rời chơi Mini-Game trên lớp.</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <!-- Bảng tra cứu 20 nguyên tố kèm gợi ý vật mẫu thật -->
-    <div class="diy-card">
-      <h2>📋 5. Bảng Nội Dung Chép Vào Thẻ & Gợi Ý Vật Mẫu Thật (20 Nguyên Tố Đầu)</h2>
-      <div class="sample-table-wrap">
-        <table class="sample-table">
-          <thead>
-            <tr>
-              <th>Z</th>
-              <th>Ký hiệu</th>
-              <th>Chu kỳ / Nhóm</th>
-              <th>Cấu hình e (Lớp e)</th>
-              <th>Bán kính</th>
-              <th>Vật mẫu thật dễ kiếm để dán vào Lớp 3</th>
-            </tr>
-          </thead>
-          <tbody id="diySampleTableBody"></tbody>
-        </table>
-      </div>
-    </div>
-
-  </div>
-</div> <!-- Đóng Mục 2 -->
 
 <!-- MODAL CHI TIẾT NGUYÊN TỬ + MÔ HÌNH 3D TƯƠNG TÁC -->
 <div class="overlay" id="overlay" onclick="closeM()">
@@ -1363,16 +1222,17 @@ const shortGroup = {
 };
 
 const typeColors = {
-  metal: "#ef4444",
-  trans: "#f97316",
-  metalloid: "#10b981",
-  nonmetal: "#3b82f6",
-  noble: "#eab308",
-  rare: "#a855f7"
+  metal: "#4f8ec9",
+  trans: "#d4a84f",
+  metalloid: "#d96b78",
+  nonmetal: "#d96b78",
+  noble: "#76a853",
+  rare: "#d4a84f",
+  hydrogen: "#94a3b8"
 };
 
-const metalloids = [5,14,32,33,51,52,84];
-const nonmetals = [1,6,7,8,9,15,16,17,34,35,53,85];
+const metalloids = [];
+const nonmetals = [5,6,7,8,9,14,15,16,17,33,34,35,52,53,85];
 
 // Hàm tính cấu hình electron & trả về số electron trên từng lớp (K, L, M, N, O, P, Q)
 function getConfigAndShells(z) {
@@ -1396,7 +1256,8 @@ function getConfigAndShells(z) {
 
 const elements = raw.map(([z, sym, name, mass, row, col]) => {
   let type = "trans", tName = "Kim loại chuyển tiếp";
-  if (row >= 8) { type = "rare"; tName = row === 8 ? "Họ Lantan (Đất hiếm)" : "Họ Actini (Phóng xạ)"; }
+  if (z === 1) { type = "hydrogen"; tName = "Phi kim (Hydrogen)"; }
+  else if (row >= 8) { type = "rare"; tName = row === 8 ? "Họ Lantan (Kim loại chuyển tiếp)" : "Họ Actini (Kim loại chuyển tiếp)"; }
   else if (col === 18) { type = "noble"; tName = "Khí hiếm"; }
   else if (metalloids.includes(z)) { type = "metalloid"; tName = "Bán kim"; }
   else if (nonmetals.includes(z)) { type = "nonmetal"; tName = "Phi kim"; }
@@ -1479,7 +1340,8 @@ function filterEl(type, btn) {
   document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
   if (btn) btn.classList.add("active");
   document.querySelectorAll(".el").forEach(c => {
-    c.classList.toggle("dimmed", type !== "all" && c.dataset.type !== type);
+    const match = type === "all" || c.dataset.type === type || (type === "nonmetal" && c.dataset.type === "hydrogen");
+    c.classList.toggle("dimmed", !match);
   });
 }
 
@@ -2341,52 +2203,7 @@ function nextQuiz() {
 }
 nextQuiz();
 
-const diySamples = {
-  1: "Hình giọt nước nhỏ / Bóng bay mini (H₂O)",
-  2: "Vỏ quả bóng bay nhỏ (Khí bơm bóng bay)",
-  3: "Hình viên pin điện thoại / Pin cúc áo nhỏ",
-  4: "Mẩu lò xo nhỏ / Hình vệ tinh hàng không",
-  5: "Mẩu thủy tinh chịu nhiệt / Thuốc nhỏ mắt",
-  6: "Mẩu ruột bút chì bấm (Than chì nguyên chất)",
-  7: "Mẩu vỏ gói bim bim/snack (Khí N₂ bảo quản)",
-  8: "Hình chiếc lá xanh / Bình oxy y tế",
-  9: "Mẩu vỏ tuýp kem đánh răng (Chứa Fluoride)",
-  10: "Bóng đèn LED nhỏ trong suốt (Đèn Neon)",
-  11: "Vài hạt muối ăn (NaCl) đựng trong túi nilon nhỏ",
-  12: "Mẩu que pháo sáng / Hình chiếc lá (Diệp lục)",
-  13: "Mẩu giấy bạc nướng thức ăn / Mảnh vỏ lon nước ngọt",
-  14: "Linh kiện điện tử/con chip cũ nhỏ hoặc vài hạt cát sạch",
-  15: "Mẩu giấy nhám đỏ ở cạnh vỏ bao diêm (Photpho đỏ)",
-  16: "Mẩu bột lưu huỳnh vàng hoặc mẩu cao su lốp xe",
-  17: "Hạt muối ăn / Nhãn chai nước tẩy Javel",
-  18: "Bóng đèn sợi đốt mini (Khí Argon bảo vệ dây tóc)",
-  19: "Vài hạt phân bón Kali hoặc hình quả chuối",
-  20: "Mẩu phấn viết bảng hoặc mảnh vỏ trứng sạch (CaCO₃)"
-};
 
-function switchMainTab(tabIndex) {
-  document.getElementById("tabBtn1").classList.toggle("active", tabIndex === 1);
-  document.getElementById("tabBtn2").classList.toggle("active", tabIndex === 2);
-  document.getElementById("mainTab1").classList.toggle("active", tabIndex === 1);
-  document.getElementById("mainTab2").classList.toggle("active", tabIndex === 2);
-}
-
-function renderDiyTable() {
-  const tbody = document.getElementById("diySampleTableBody");
-  if (!tbody) return;
-  const first20 = elements.filter(e => e.z <= 20);
-  tbody.innerHTML = first20.map(e => `
-    <tr>
-      <td><strong>${e.z}</strong></td>
-      <td><strong style="color:#38bdf8;font-size:0.95rem;">${e.sym}</strong> (${e.name.split(' ')[0]})</td>
-      <td>CK ${e.p} — Nhóm ${shortGroup[e.col]}</td>
-      <td>${e.cfg} <span style="color:#facc15;">(${e.shells.join('-')})</span></td>
-      <td>${e.rad} pm</td>
-      <td>${diySamples[e.z] || e.app}</td>
-    </tr>
-  `).join("");
-}
-renderDiyTable();
 
 const labElements = ["H", "C", "N", "O", "Na", "Mg", "Al", "S", "Cl", "Ca", "Fe", "Cu"];
 const reactionsDB = {
