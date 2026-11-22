@@ -706,7 +706,7 @@
     </div>
     <div class="cl-hud-actions">
       <button class="cl-mini-btn on" id="clSoundBtn" onclick="clToggleSound()">🔊 Âm thanh: Bật</button>
-      <button class="cl-mini-btn" id="clDemoBtn" onclick="clToggleUnlockAll()" title="Bật để mở tự do cả 4 chặng khi thuyết trình trước lớp">🎓 Mở hết (Thuyết trình)</button>
+      <button class="cl-mini-btn" id="clDemoBtn" onclick="clToggleUnlockAll()" title="Bật để mở tự do cả 7 chặng khi thuyết trình trước lớp">🎓 Mở hết (Thuyết trình)</button>
       <button class="cl-mini-btn" onclick="clRefillHearts()" title="Hồi đầy 5 tim">❤️ Hồi tim</button>
       <button class="cl-mini-btn qr-btn" onclick="clPrintQR()" title="In mã QR riêng của ChemLingo dán lên bảng carton">🖨️ Mã QR</button>
     </div>
@@ -717,7 +717,7 @@
     <div class="cl-path-banner">
       <div>
         <h2>LỘ TRÌNH CHINH PHỤC BÀI 5 — BẢNG TUẦN HOÀN</h2>
-        <p>Hoàn thành 4 chặng để làm chủ Ký hiệu, Cấu hình electron, Bán kính nguyên tử & Ứng dụng thực tế!</p>
+        <p>Hoàn thành 7 chặng để làm chủ Ký hiệu, Cấu hình electron, Bán kính nguyên tử & Ứng dụng thực tế!</p>
       </div>
       <div style="font-size:2.4rem;">🧪</div>
     </div>
@@ -808,7 +808,7 @@ function clSaveState() {
 
   const db = document.getElementById("clDemoBtn");
   db.classList.toggle("on", clState.unlockAll);
-  db.textContent = clState.unlockAll ? "🎓 Đang mở hết 4 chặng" : "🎓 Mở hết (Thuyết trình)";
+  db.textContent = clState.unlockAll ? "🎓 Đang mở hết 7 chặng" : "🎓 Mở hết (Thuyết trình)";
 }
 
 let clAudioCtx = null;
@@ -1111,7 +1111,168 @@ const clUnits = [
           ["C + O₂", "CO₂ (Khí tạo ga)"],
           ["2Ca + O₂", "2CaO (Vôi sống)"]
         ],
-        explain: "Xuất sắc! Bạn đã hoàn thành trọn vẹn 4 chặng ChemLingo!"
+        explain: "Xuất sắc! Bạn đã hoàn thành xuất sắc Chặng 4! Chuẩn bị bước vào 3 chặng nâng cao nhé!"
+      }
+    ]
+  }
+,
+  {
+    id: 5,
+    icon: "⚗️",
+    title: "Chặng 5: Oxide & Hydroxide Cao Nhất",
+    desc: "Xác định công thức oxide cao nhất, hydroxide & xu hướng tính acid - base",
+    offset: "offset-right",
+    questions: [
+      {
+        type: "mcq",
+        prompt: "Nguyên tố R thuộc Nhóm VIA (như Sulfur, S). Công thức OXIDE CAO NHẤT của R là:",
+        options: ["RO₃", "R₂O₅", "RO₂", "R₂O₇"],
+        answer: "RO₃",
+        refEl: "S",
+        explain: "Hóa trị cao nhất với oxygen bằng số thứ tự nhóm A (nhóm VIA ➔ hóa trị VI) ➔ công thức là RO₃ (ví dụ SO₃)."
+      },
+      {
+        type: "match",
+        prompt: "Ghép Nhóm A với Công thức Oxide cao nhất tương ứng:",
+        pairs: [
+          ["Nhóm IA", "R₂O"],
+          ["Nhóm IIA", "RO"],
+          ["Nhóm IVA", "RO₂"],
+          ["Nhóm VIIA", "R₂O₇"]
+        ],
+        explain: "Chuẩn xác! Hóa trị cao nhất với O bằng đúng số thứ tự nhóm A (từ IA đến VIIA)."
+      },
+      {
+        type: "versus",
+        prompt: "Cùng Chu kỳ 3, hydroxide nào có TÍNH BASE MẠNH HƠN?",
+        left: { sym: "NaOH", sub: "Na (Nhóm IA)", val: "NaOH" },
+        right: { sym: "Mg(OH)₂", sub: "Mg (Nhóm IIA)", val: "Mg(OH)₂" },
+        answer: "NaOH",
+        refEl: "Na",
+        explain: "Trong cùng chu kỳ, đi từ trái sang phải tính kim loại giảm dần ➔ tính base của hydroxide giảm dần: NaOH > Mg(OH)₂ > Al(OH)₃."
+      },
+      {
+        type: "mcq",
+        prompt: "Hydroxide nào sau đây có tính LƯỠNG TÍNH (vừa tác dụng với acid, vừa tác dụng với base)?",
+        options: ["Al(OH)₃", "NaOH", "H₂SO₄", "Mg(OH)₂"],
+        answer: "Al(OH)₃",
+        refEl: "Al",
+        explain: "Aluminium hydroxide Al(OH)₃ nằm ở ranh giới kim loại - phi kim trong Chu kỳ 3 nên có tính lưỡng tính."
+      },
+      {
+        type: "versus",
+        prompt: "Cùng Chu kỳ 3, acid nào có TÍNH ACID MẠNH HƠN?",
+        left: { sym: "H₂SO₄", sub: "S (Nhóm VIA)", val: "H2SO4" },
+        right: { sym: "HClO₄", sub: "Cl (Nhóm VIIA)", val: "HClO4" },
+        answer: "HClO4",
+        refEl: "Cl",
+        explain: "Đi từ trái sang phải trong Chu kỳ 3, tính phi kim tăng dần ➔ tính acid tăng dần: H₂SiO₃ < H₃PO₄ < H₂SO₄ < HClO₄."
+      }
+    ]
+  },
+  {
+    id: 6,
+    icon: "🕵️",
+    title: "Chặng 6: Săn Tìm Nguyên Tố Bí Ẩn",
+    desc: "Từ cấu hình electron & vị trí trong bảng suy ngược ra nguyên tố",
+    offset: "offset-left",
+    questions: [
+      {
+        type: "tiles",
+        prompt: "Xếp cấu hình electron đầy đủ của Potassium (K, Z = 19):",
+        correctSeq: ["1s²", "2s²", "2p⁶", "3s²", "3p⁶", "4s¹"],
+        distractors: ["3d¹", "4s²"],
+        refEl: "K",
+        explain: "Phân lớp 4s có mức năng lượng thấp hơn 3d nên electron thứ 19 điền vào 4s¹ ➔ K ở Chu kỳ 4, Nhóm IA."
+      },
+      {
+        type: "mcq",
+        prompt: "Nguyên tố X nằm ở Chu kỳ 2, Nhóm IVA. X là nguyên tố nào?",
+        options: ["Carbon (C, Z = 6)", "Silicon (Si, Z = 14)", "Nitrogen (N, Z = 7)", "Oxygen (O, Z = 8)"],
+        answer: "Carbon (C, Z = 6)",
+        refEl: "C",
+        explain: "Chu kỳ 2 (2 lớp e) + Nhóm IVA (4e lớp ngoài cùng) ➔ 1s² 2s² 2p² (Z = 6, Carbon)."
+      },
+      {
+        type: "mcq",
+        prompt: "Một nguyên tố có tổng số electron ở lớp ngoài cùng là 7 và có 2 lớp electron. Đó là:",
+        options: ["Fluorine (F)", "Chlorine (Cl)", "Nitrogen (N)", "Neon (Ne)"],
+        answer: "Fluorine (F)",
+        refEl: "F",
+        explain: "2 lớp e (Chu kỳ 2) và 7e lớp ngoài cùng (Nhóm VIIA) ➔ 1s² 2s² 2p⁵ (Z = 9, Fluorine)."
+      },
+      {
+        type: "tiles",
+        prompt: "Xếp cấu hình electron của Calcium (Ca, Z = 20):",
+        correctSeq: ["1s²", "2s²", "2p⁶", "3s²", "3p⁶", "4s²"],
+        distractors: ["3d²", "4p²"],
+        refEl: "Ca",
+        explain: "Ca (Z = 20) có cấu hình [Ar] 4s² ➔ Chu kỳ 4, Nhóm IIA (Kim loại kiềm thổ)."
+      },
+      {
+        type: "match",
+        prompt: "Ghép Vị trí trong bảng tuần hoàn với Nguyên tố tương ứng:",
+        pairs: [
+          ["CK 1, IA", "Hydrogen (H)"],
+          ["CK 2, VIIIA", "Neon (Ne)"],
+          ["CK 3, IIA", "Magnesium (Mg)"],
+          ["CK 3, VA", "Phosphorus (P)"]
+        ],
+        explain: "Quá đỉnh! Bạn đã đọc vị trí bảng tuần hoàn nhanh như máy tính."
+      }
+    ]
+  },
+  {
+    id: 7,
+    icon: "👑",
+    title: "Chặng 7: Trùm Cuối Bảng Tuần Hoàn",
+    desc: "Tổng hợp câu hỏi vận dụng cao, hợp chất khí với H & độ âm điện",
+    offset: "",
+    questions: [
+      {
+        type: "mcq",
+        prompt: "Nguyên tố R thuộc Nhóm VA (như Nitrogen). Công thức HỢP CHẤT KHÍ VỚI HYDROGEN của R là:",
+        options: ["RH₃", "RH₄", "H₂R", "HR"],
+        answer: "RH₃",
+        refEl: "N",
+        explain: "Hóa trị với H bằng (8 − số thứ tự nhóm A) = 8 − 5 = 3 ➔ công thức là RH₃ (ví dụ NH₃, PH₃)."
+      },
+      {
+        type: "versus",
+        prompt: "Nguyên tố nào có TÍNH PHI KIM MẠNH HƠN?",
+        left: { sym: "O", sub: "Z = 8 (CK 2, VIA)", val: "O" },
+        right: { sym: "S", sub: "Z = 16 (CK 3, VIA)", val: "S" },
+        answer: "O",
+        refEl: "O",
+        explain: "Trong cùng nhóm VIA, đi từ trên xuống bán kính tăng nên khả năng hút electron giảm ➔ tính phi kim giảm dần (O > S)."
+      },
+      {
+        type: "mcq",
+        prompt: "Dãy nào sau đây sắp xếp đúng theo chiều TĂNG DẦN ĐỘ ÂM ĐIỆN?",
+        options: ["Na < Mg < Al < Si", "F < O < N < C", "Cl < S < P < Si", "K < Na < Li < Cs"],
+        answer: "Na < Mg < Al < Si",
+        refEl: "Si",
+        explain: "Trong cùng Chu kỳ 3, đi từ trái sang phải độ âm điện tăng dần: Na (0,93) < Mg (1,31) < Al (1,61) < Si (1,90)."
+      },
+      {
+        type: "versus",
+        prompt: "Giữa K (Z=19) và Na (Z=11), kim loại nào phản ứng với nước MÃNH LIỆT HƠN?",
+        left: { sym: "Na", sub: "Chu kỳ 3, Nhóm IA", val: "Na" },
+        right: { sym: "K", sub: "Chu kỳ 4, Nhóm IA", val: "K" },
+        answer: "K",
+        refEl: "K",
+        explain: "K ở dưới Na trong Nhóm IA nên có bán kính lớn hơn, dễ nhường 1e hơn ➔ tính kim loại mạnh hơn, phản ứng với nước mãnh liệt hơn."
+      },
+      {
+        type: "match",
+        prompt: "Thử thách cuối: Ghép Công thức Oxide cao nhất với Hợp chất khí với H của cùng nguyên tố:",
+        pairs: [
+          ["CO₂ (IVA)", "CH₄"],
+          ["N₂O₅ (VA)", "NH₃"],
+          ["SO₃ (VIA)", "H₂S"],
+          ["Cl₂O₇ (VIIA)", "HCl"]
+        ],
+        explain: "👑 CHÚC MỪNG BẠN ĐÃ PHÁ ĐẢO TRỌN BỘ 7 CHẶNG CHEMLINGO HÓA HỌC 10!"
       }
     ]
   }
